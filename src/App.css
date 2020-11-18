@@ -1,38 +1,53 @@
-.App {
-  text-align: center;
+* {
+  background: #555555;
+  color: #ffffff;
+}
+.varitem {
+  /* border: solid 1px #6bc431; */
+  background: #6d496b;
+  width: 100%;
+  float: left;
+  
+  /* margin: 0 auto; */
 }
 
-.App-logo {
-  height: 40vmin;
-  pointer-events: none;
+.varitem_name {
+  background: inherit;
+  /* border: dotted 1px; */
+  float: left;
+  width: 20%;
+  margin: 2px;
+}
+.varitem_plcvalue {
+  background: inherit;
+  /* border: dotted 1px; */
+  float: left;
+  width: 20%;
+  margin: 2px;
 }
 
-@media (prefers-reduced-motion: no-preference) {
-  .App-logo {
-    animation: App-logo-spin infinite 20s linear;
-  }
+.varitem_uservalue {
+  background: inherit;
+  /* border: dotted 1px; */
+  float: left;
+  width: 50%;
+  margin: 2px;
 }
 
-.App-header {
-  background-color: #282c34;
-  min-height: 100vh;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  font-size: calc(10px + 2vmin);
-  color: white;
+.varitem_uservalue input {
+  width: 30%;
+  margin-right: 10px;
+	/* color: #ff0000; */
+}
+.varitem_uservalue [name=reset] {
+  width: 20px;
+  margin: 0;
 }
 
-.App-link {
-  color: #61dafb;
+.different:valid {
+  background-color: #aaf14d;
 }
 
-@keyframes App-logo-spin {
-  from {
-    transform: rotate(0deg);
-  }
-  to {
-    transform: rotate(360deg);
-  }
+.varvalue:invalid {
+  background-color: #ffaaaa;
 }
