@@ -109,10 +109,10 @@ export default class VarItem extends Component<iProps, iState> {
 
 function getPattern(type: string): string {
   if (type === "int") {
-    return "[0-9][0-9]*";
+    return "-?[0-9]+";
   }
   if (type === "float") {
-    return "[0-9][0-9]*\\.[0-9][0-9]*";
+    return "-?[0-9]+(\\.[0-9]+)?";
   }
   if (type === "bool") {
     return "true|false|True|False";

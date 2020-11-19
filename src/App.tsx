@@ -3,6 +3,8 @@ import { Component } from "react";
 import React from "react";
 import VarItem from "./components/VarItem";
 import { iPlcVar } from "./components/iPlcVar";
+import Axios from "axios";
+import parse from "url-parse";
 
 interface iProps {}
 interface iState {
@@ -15,34 +17,11 @@ interface iState {
   user_var: iPlcVar[];
   additional_key: number;
 }
-const plc_variables: iPlcVar[] = [
-  {
-    id: 1,
-    type: "int",
-    name: "state1",
-    value: 0,
-  },
-  {
-    id: 2,
-    type: "float",
-    name: "x",
-    value: 2.4,
-  },
-  {
-    id: 3,
-    type: "bool",
-    name: "enable",
-    value: true,
-  },
-];
-function getPlcVariables(): iPlcVar[] {
-  return plc_variables;
-}
 
 function getState(): iState {
   const ret: iState = {
-    plc_vars: getPlcVariables(),
-    user_var: JSON.parse(JSON.stringify(getPlcVariables())),
+    plc_vars: [],
+    user_var: [],
     additional_key: 0,
   };
   return ret;
@@ -56,11 +35,18 @@ class App extends Component<iProps, iState> {
     this.timerID = setTimeout(() => {}, 0);
   }
   componentDidMount() {
-    //здесь происходит обновление по интервалу
-    this.timerID = setInterval(() => {
-      plc_variables[0].value++;
-      this.setState({ plc_vars: getPlcVariables() });
-    }, 200);
+    Axios.get(`http://${parse(window.location.href).hostname}:5000/plc_vars`).then((res) => {
+      this.setState((state, props) => ({
+        plc_vars: res.data,
+        user_var: JSON.parse(JSON.stringify(res.data)),
+      }));
+      //здесь происходит обновление по интервалу
+      this.timerID = setInterval(() => {
+        Axios.get(`http://${parse(window.location.href).hostname}:5000/plc_vars`).then((res) =>
+          this.setState({ plc_vars: res.data })
+        );
+      }, 100);
+    });
   }
 
   componentWillUnmount() {
@@ -81,7 +67,7 @@ class App extends Component<iProps, iState> {
   //здесь происходит отправка запроса на запись значения
   writeValue = (changed_item: iPlcVar, value: any) => {
     // эмуляция общения с сервером
-    const _state = getPlcVariables();
+    const _state: iPlcVar[] = JSON.parse(JSON.stringify(this.state.plc_vars));
     const item = _state.find((item) => item.id === changed_item.id);
     if (item) item.value = value;
     this.setState({ plc_vars: _state });
