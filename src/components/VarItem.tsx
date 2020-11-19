@@ -4,9 +4,9 @@ import { iPlcVar } from "./iPlcVar";
 interface iProps {
   key: any;
   varitem: iPlcVar;
+  useritem: iPlcVar;
   value_change: (item: iPlcVar, value: any) => void;
-  reset: (id: number) => void;
-  writeValue: (id: number, value: any) => boolean;
+  writeValue: (changed_item: iPlcVar, value: any) => boolean;
 }
 interface iState {
   user_value: any;
@@ -30,34 +30,34 @@ export default class VarItem extends Component<iProps, iState> {
     const new_value = e.target.value;
 
     this.setState({ user_value: new_value });
-    this.props.value_change(this.props.varitem, new_value);
-
-    if (this.props.varitem.value.toString() !== new_value.toString())
-      this.setState({ value_class_name: "varvalue different" });
-    else this.setState({ value_class_name: "varvalue" });
+    if (this.input.current.reportValidity())
+			this.props.value_change(this.props.varitem, new_value);
   };
 
   componentDidMount() {
-    this.setState({ user_value: this.props.varitem.value });
+    this.setState({ user_value: this.props.useritem.value });
   }
+  componentDidUpdate() {}
 
   resetValue = () => {
-    this.setState({ user_value: this.props.varitem.value });
-    this.setState({ value_class_name: "varvalue" });
-    this.props.reset(this.props.varitem.id);
+    this.setState(() => {
+      this.props.value_change(this.props.varitem, this.props.varitem.value);
+      return { user_value: this.props.varitem.value };
+    });
   };
 
   writeValue = () => {
     const write_val = new Promise((resolve, reject) => {
       if (
         this.input.current.reportValidity() &&
-        this.props.writeValue(this.props.varitem.id, this.state.user_value)
+        this.props.writeValue(this.props.varitem, this.state.user_value)
       ) {
         resolve();
       }
     });
     write_val.then(() => {
-      this.onChange({ target: { value: this.props.varitem.value, name: "" } });
+      // this.onChange({ target: { value: this.props.varitem.value, name: "" } });
+
       console.log(`value updated ${this.props.varitem.value}`);
     });
   };
@@ -77,7 +77,14 @@ export default class VarItem extends Component<iProps, iState> {
               type="text"
               name="user_value"
               value={this.state.user_value}
-              className={this.state.value_class_name}
+              className={(() => {
+                if (
+                  this.state.user_value.toString() ===
+                  this.props.varitem.value.toString()
+                )
+                  return "varvalue";
+                else return "varvalue different";
+              })()}
               onChange={this.onChange}
               pattern={getPattern(this.props.varitem.type)}
             />

@@ -7,6 +7,13 @@ import { iPlcVar } from "./components/iPlcVar";
 interface iProps {}
 interface iState {
   plc_vars: iPlcVar[];
+
+  // тут у нас будут храниться те значения,
+  // которые мы на странице изменили, чтобы
+  // иметь возможность отправить их скопом
+  // на сервер
+  user_var: iPlcVar[];
+  additional_key: number;
 }
 const plc_variables: iPlcVar[] = [
   {
@@ -35,6 +42,8 @@ function getPlcVariables(): iPlcVar[] {
 function getState(): iState {
   const ret: iState = {
     plc_vars: getPlcVariables(),
+    user_var: JSON.parse(JSON.stringify(getPlcVariables())),
+    additional_key: 0,
   };
   return ret;
 }
@@ -47,44 +56,82 @@ class App extends Component<iProps, iState> {
     this.timerID = setTimeout(() => {}, 0);
   }
   componentDidMount() {
+    //здесь происходит обновление по интервалу
     this.timerID = setInterval(() => {
       plc_variables[0].value++;
       this.setState({ plc_vars: getPlcVariables() });
-    }, 1000);
+    }, 200);
   }
 
   componentWillUnmount() {
     clearInterval(this.timerID);
   }
 
-  value_changed = (item: iPlcVar, value: any) => {
-    // this.state.user_values.filter((u_v) => u_v.id === id)[0].value = value;
-    // this.setState({user_values: this.state.user_values});
+  value_changed = (changed_item: iPlcVar, value: any) => {
+    // сохраняем значение в массив,
+    // чтобы потом по этому массиву сделать обновление
+    // сразу нескольких полей
+    console.log(`value holdup ${value}`);
+    const user_values = this.state.user_var;
+    const index = user_values.findIndex((item) => item.id === changed_item.id);
+    user_values[index].value = value;
+    this.setState({ user_var: user_values });
   };
 
-  resetValue = (id: number) => {
-    console.log(`reset value ${id}`);
-  };
-  writeValue = (id: number, value: any) => {
+  //здесь происходит отправка запроса на запись значения
+  writeValue = (changed_item: iPlcVar, value: any) => {
+    // эмуляция общения с сервером
     const _state = getPlcVariables();
-    const item = _state.find((item) => item.id === id);
+    const item = _state.find((item) => item.id === changed_item.id);
     if (item) item.value = value;
     this.setState({ plc_vars: _state });
+    //-------------------
+
     return true;
   };
 
+  updateAll = () => {
+    //эмулируем общение с сервером
+    const new_state = [...this.state.plc_vars];
+    this.state.user_var.forEach((item) => {
+      const new_val = new_state.find((n_item) => n_item.id === item.id);
+      if (new_val) new_val.value = item.value;
+    });
+    this.setState({ plc_vars: new_state });
+  };
+  // обновляем значения в userVar
+  resetAll = () => {
+    const new_state = [...this.state.user_var];
+    this.state.plc_vars.forEach((item) => {
+      const new_val = new_state.find((n_item) => n_item.id === item.id);
+      if (new_val) new_val.value = item.value;
+    });
+    this.setState((state, props) => ({
+      additional_key: state.additional_key + 1,
+    }));
+  };
   render() {
     return (
       <div className="App">
-        {this.state.plc_vars.map((item) => (
+        {this.state.plc_vars.map((item, index) => (
           <VarItem
-            key={item.id}
+            key={`${item.id}_add_key_${this.state.additional_key}`}
             varitem={item}
             value_change={this.value_changed}
-            reset={this.resetValue}
             writeValue={this.writeValue}
+            useritem={this.state.user_var[index]}
           />
         ))}
+        <input
+          type="button"
+          onClick={(e) => this.updateAll()}
+          value="writeAll"
+        />
+        <input
+          type="button"
+          onClick={(e) => this.resetAll()}
+          value="resetAll"
+        />
       </div>
     );
   }

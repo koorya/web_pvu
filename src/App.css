@@ -45,9 +45,9 @@
 }
 
 .different:valid {
-  background-color: #aaf14d;
+  background-color: #628831;
 }
 
 .varvalue:invalid {
-  background-color: #ffaaaa;
+  background-color: #b97b7b;
 }
