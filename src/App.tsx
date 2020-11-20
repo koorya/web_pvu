@@ -45,7 +45,7 @@ class App extends Component<iProps, iState> {
         Axios.get(`http://${parse(window.location.href).hostname}:5000/plc_vars`).then((res) =>
           this.setState({ plc_vars: res.data })
         );
-      }, 100);
+      }, 500);
     });
   }
 
@@ -68,9 +68,15 @@ class App extends Component<iProps, iState> {
   writeValue = (changed_item: iPlcVar, value: any) => {
     // эмуляция общения с сервером
     const _state: iPlcVar[] = JSON.parse(JSON.stringify(this.state.plc_vars));
+    changed_item = Object.assign({}, changed_item);
+    changed_item.value = value;
+    const prom = Axios.put(`http://${parse(window.location.href).hostname}:5000/plc_vars`, [changed_item]);
+    prom.then((res)=>console.log(`${changed_item.value} ${res.data}`));
+    prom.catch((res)=>console.log(`AXIOS PUT FAILED ${res}`));
+
     const item = _state.find((item) => item.id === changed_item.id);
     if (item) item.value = value;
-    this.setState({ plc_vars: _state });
+    // this.setState({ plc_vars: _state });
     //-------------------
 
     return true;
@@ -79,11 +85,15 @@ class App extends Component<iProps, iState> {
   updateAll = () => {
     //эмулируем общение с сервером
     const new_state = [...this.state.plc_vars];
+    let upd_vars: iPlcVar[] = [];
     this.state.user_var.forEach((item) => {
       const new_val = new_state.find((n_item) => n_item.id === item.id);
-      if (new_val) new_val.value = item.value;
+      if (new_val && new_val.value !== item.value) 
+        upd_vars = [...upd_vars, item];
     });
-    this.setState({ plc_vars: new_state });
+    Axios.put(`http://${parse(window.location.href).hostname}:5000/plc_vars`, upd_vars);
+    
+    // this.setState({ plc_vars: new_state });
   };
   // обновляем значения в userVar
   resetAll = () => {
