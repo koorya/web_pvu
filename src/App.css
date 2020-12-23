@@ -1,6 +1,9 @@
-* {
+body {
   background: #555555;
   color: #ffffff;
+}
+.App {
+  width: 480px;
 }
 .varitem {
   /* border: solid 1px #6bc431; */
@@ -9,6 +12,15 @@
   float: left;
   
   /* margin: 0 auto; */
+}
+
+.ImageDiv {
+  width: 480px;
+  height: 360px;
+}
+.ImageDiv img {
+  width: 100%;
+  height: auto;
 }
 
 .varitem_name {
