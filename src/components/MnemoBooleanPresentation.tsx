@@ -7,7 +7,8 @@ interface iProps {
   useritem: iPlcVar;
   templateimage: any;
   left: string;
-  top: string;
+	top: string;
+	text: string;
   value_change: (item: iPlcVar, value: any) => void;
   writeValue: (changed_item: iPlcVar, value: any) => boolean;
 }
@@ -71,8 +72,6 @@ export default class MnemoBooleanPresentation extends Component<
   render() {
     return (
       <div>
-        {this.props.varitem.name}
-
         <div
           style={{
             position: "absolute",
@@ -83,7 +82,7 @@ export default class MnemoBooleanPresentation extends Component<
             fontWeight: "bold",
           }}
         >
-          Распределитель Р1 ({this.props.varitem.name})
+          {this.props.text} ({this.props.varitem.name})
           <input
             type="button"
             style={{
@@ -95,11 +94,11 @@ export default class MnemoBooleanPresentation extends Component<
               padding: "0px",
               marginRight: "-15px",
               marginLeft: "10px",
-              backgroundColor: "#0f0",
+              backgroundColor: this.props.varitem.value?"#0f0":"#ddd",
             }}
             disabled
           />
-          <input type="button" value="off" style={{ paddingLeft: "14px" }} />
+          <input type="button" value={this.props.varitem.value?"on":"off"} style={{ paddingLeft: "14px" }} onClick={() => this.props.varitem.value ? this.props.writeValue(this.props.varitem, false):  this.props.writeValue(this.props.varitem, true)} />
         </div>
         <img
           src={this.props.templateimage}

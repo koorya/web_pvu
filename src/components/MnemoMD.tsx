@@ -26,18 +26,6 @@ function getState(): iState {
   return ret;
 }
 
-const plc_parameters_view: { [id: string]: any } = {
-  Y1: {
-    templateimage: imgY1,
-    left: "130px",
-    top: "310px",
-  },
-  Y2: {
-    templateimage: imgY2,
-    left: "160px",
-    top: "276px",
-  },
-};
 
 export default class MnemoMD extends Component<iProps, iState> {
   state = getState();
@@ -127,6 +115,15 @@ export default class MnemoMD extends Component<iProps, iState> {
     }));
   };
 
+  getPlcVarIndexByName = (name: string): number => {
+    let ret_index = -1;
+    this.state.plc_vars.find((item, index) => {
+      ret_index = index;
+      return item.name === name;
+    });
+    return ret_index;
+  };
+
   render() {
     return (
       <div>
@@ -149,23 +146,42 @@ export default class MnemoMD extends Component<iProps, iState> {
               zIndex: -1,
             }}
           />
+          {this.getPlcVarIndexByName("Y1") != -1 ? (
+            <MnemoBooleanPresentation
+              key={`${
+                this.state.plc_vars[this.getPlcVarIndexByName("Y1")].id
+              }_add_key_${this.state.additional_key}`}
+              varitem={this.state.plc_vars[this.getPlcVarIndexByName("Y1")]}
+              value_change={this.value_changed}
+              writeValue={this.writeValue}
+              useritem={this.state.user_var[this.getPlcVarIndexByName("Y1")]}
+              templateimage={imgY1}
+              left="130px"
+              top="310px"
+              text = "Распределитель Р1"
+            />
+          ) : (
+            " "
+          )}
 
+          {this.getPlcVarIndexByName("Y2") != -1 ? (
+            <MnemoBooleanPresentation
+              key={`${
+                this.state.plc_vars[this.getPlcVarIndexByName("Y2")].id
+              }_add_key_${this.state.additional_key}`}
+              varitem={this.state.plc_vars[this.getPlcVarIndexByName("Y2")]}
+              value_change={this.value_changed}
+              writeValue={this.writeValue}
+              useritem={this.state.user_var[this.getPlcVarIndexByName("Y2")]}
+              templateimage={imgY2}
+              left="160px"
+              top="276px"
+              text = "Распределитель Р2"
+              />
+          ) : (
+            " "
+          )}
 
-          {this.state.plc_vars.map((element, index) => {
-            if (plc_parameters_view[element.name] !== undefined)
-              return (
-                <MnemoBooleanPresentation
-                  key={`${element.id}_add_key_${this.state.additional_key}`}
-                  varitem={element}
-                  value_change={this.value_changed}
-                  writeValue={this.writeValue}
-                  useritem={this.state.user_var[index]}
-                  templateimage={plc_parameters_view[element.name].templateimage}
-                  left={plc_parameters_view[element.name].left}
-                  top={plc_parameters_view[element.name].top}
-                />
-              );
-          })}
 
           <img
             src={imgmarkline}
