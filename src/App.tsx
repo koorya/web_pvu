@@ -1,19 +1,27 @@
 import "./App.css";
 import { Component } from "react";
 import React from "react";
-import  VarList  from "./components/VarList";
-import Image from "./components/Image"
+import VarList from "./components/VarList";
+import Image from "./components/Image";
+import MnemoMD from "./components/MnemoMD";
 
+
+import { BrowserRouter, Route, Switch, Redirect, withRouter } from "react-router-dom";
+// import {Router} from "react-router";
 
 
 class App extends Component {
-
-
   render() {
     return (
       <div className="App">
-        <VarList key="varlist1"/>
-        <Image key="image" />
+        <BrowserRouter>
+          <Switch>
+            <Route exact path="/home" component={VarList} />
+            <Route exact path="/md" component={MnemoMD} />
+            <Route exact path="/image" component={Image} />
+            <Redirect from="/" to="/md" />
+          </Switch>
+        </BrowserRouter>
       </div>
     );
   }

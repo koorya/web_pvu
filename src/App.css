@@ -1,9 +1,12 @@
 body {
   background: #555555;
   color: #ffffff;
+  margin: auto;
 }
 .App {
-  width: 480px;
+  width: 1300px;
+  margin: auto;
+  text-align: center;
 }
 .varitem {
   /* border: solid 1px #6bc431; */
