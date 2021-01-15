@@ -5,7 +5,6 @@ interface iProps {
   key: any;
   varitem: iPlcVar;
   useritem: iPlcVar;
-  templateimage: any;
   left: string;
 	top: string;
 	text: string;
@@ -54,7 +53,7 @@ export default class MnemoBooleanPresentation extends Component<
   };
 
   writeValue = () => {
-    const write_val = new Promise((resolve, reject) => {
+    const write_val = new Promise<void>((resolve, reject) => {
       if (
         this.input.current.reportValidity() &&
         this.props.writeValue(this.props.varitem, this.state.user_value)
@@ -98,19 +97,9 @@ export default class MnemoBooleanPresentation extends Component<
             }}
             disabled
           />
-          <input type="button" value={this.props.varitem.value?"on":"off"} style={{ paddingLeft: "14px" }} onClick={() => this.props.varitem.value ? this.props.writeValue(this.props.varitem, false):  this.props.writeValue(this.props.varitem, true)} />
+          <input type="button" value={this.props.varitem.value?"on":"off"} style={{ paddingLeft: "14px" }} onClick={() =>{ this.props.varitem.value ? this.props.writeValue(this.props.varitem, false):  this.props.writeValue(this.props.varitem, true)}} />
         </div>
-        <img
-          src={this.props.templateimage}
-          alt="{this.props.varitem.name}"
-          style={{
-            position: "absolute",
-            left: "0px",
-            top: "0px",
-						zIndex: -1,
-						visibility: this.props.varitem.value?"visible":"hidden",
-          }}
-        />
+        
       </div>
     );
   }

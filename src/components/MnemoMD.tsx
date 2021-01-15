@@ -1,13 +1,11 @@
 import React, { Component } from "react";
-import VarItem from "./VarItem";
 import { iPlcVar } from "./iPlcVar";
 import Axios from "axios";
 import parse from "url-parse";
-import imgmarkline from "./md_mnemo/lay/markline.png";
-import nmemoimg from "./md_mnemo/lay/ostov.png";
-import imgY2 from "./md_mnemo/lay/Y2.png";
-import imgY1 from "./md_mnemo/lay/Y1.png";
 import MnemoBooleanPresentation from "./MnemoBooleanPresentation";
+
+import Page2  from "./md_mnemo/page2";
+import SvgStyles from "./svgmd/SvgStyles";
 
 interface iProps {}
 interface iState {
@@ -26,10 +24,9 @@ function getState(): iState {
   return ret;
 }
 
-
 export default class MnemoMD extends Component<iProps, iState> {
   state = getState();
-
+  svg_ref = React.createRef<HTMLDocument>();
   timerID: NodeJS.Timeout;
   constructor(props: iProps) {
     super(props);
@@ -126,7 +123,7 @@ export default class MnemoMD extends Component<iProps, iState> {
 
   render() {
     return (
-      <div>
+      <div style={{backgroundColor: "#fff"}}>
         <div
           style={{
             position: "relative",
@@ -136,16 +133,6 @@ export default class MnemoMD extends Component<iProps, iState> {
             padding: "0px",
           }}
         >
-          <img
-            src={nmemoimg}
-            alt="nmemoimg"
-            style={{
-              position: "absolute",
-              left: "0px",
-              top: "0px",
-              zIndex: -1,
-            }}
-          />
           {this.getPlcVarIndexByName("Y1") != -1 ? (
             <MnemoBooleanPresentation
               key={`${
@@ -155,10 +142,9 @@ export default class MnemoMD extends Component<iProps, iState> {
               value_change={this.value_changed}
               writeValue={this.writeValue}
               useritem={this.state.user_var[this.getPlcVarIndexByName("Y1")]}
-              templateimage={imgY1}
               left="130px"
               top="310px"
-              text = "Распределитель Р1"
+              text="Распределитель Р1"
             />
           ) : (
             " "
@@ -173,26 +159,23 @@ export default class MnemoMD extends Component<iProps, iState> {
               value_change={this.value_changed}
               writeValue={this.writeValue}
               useritem={this.state.user_var[this.getPlcVarIndexByName("Y2")]}
-              templateimage={imgY2}
               left="160px"
               top="276px"
-              text = "Распределитель Р2"
-              />
+              text="Распределитель Р2"
+            />
           ) : (
             " "
           )}
 
-
-          <img
-            src={imgmarkline}
-            alt="imgmarkline"
-            style={{
-              position: "absolute",
-              left: "0px",
-              top: "0px",
-              zIndex: -1,
-            }}
-          />
+          {this.getPlcVarIndexByName("Y2") != -1 ? (
+            <SvgStyles
+              Y1={this.state.plc_vars[this.getPlcVarIndexByName("Y1")].value}
+              Y2={this.state.plc_vars[this.getPlcVarIndexByName("Y2")].value}
+            />
+          ) : (
+            ""
+          )}
+          <Page2 />
         </div>
       </div>
     );
