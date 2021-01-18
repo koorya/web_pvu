@@ -47,13 +47,13 @@ export default class SvgStyles extends Component<iProps, iState> {
         {`#Y9{display:${this.props.Y9 ? "inline" : "none"};}`}
         {`#Y8{display:${this.props.Y8 ? "inline" : "none"};}`}
         {`#Y21{display:${this.props.Y21 ? "inline" : "none"};}`}
-        {`#Y22{display:${this.props.Y1 ? "inline" : "none"};}`}
+        {`#Y22{display:${this.props.Y22 ? "inline" : "none"};}`}
         {`#Y15{display:${this.props.Y15 ? "inline" : "none"};}`}
         {`#Y14{display:${this.props.Y14 ? "inline" : "none"};}`}
         {`#Y12{display:${this.props.Y12 ? "inline" : "none"};}`}
         {`#Y13{display:${this.props.Y13 ? "inline" : "none"};}`}
         {`#Y10{display:${this.props.Y10 ? "inline" : "none"};}`}
-        {`#Y11{display:${this.props.Y11 ? "inline" : "none"};}`}
+        {/* {`#Y11{display:${this.props.Y11 ? "inline" : "none"};}`} */}
       </style>
     );
   }

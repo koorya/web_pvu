@@ -18,7 +18,7 @@ interface iState {
   value_class_name: string;
 }
 
-export default class MnemoBooleanPresentation extends Component<
+export default class MnemoNumericPresentation extends Component<
   iProps,
   iState
 > {
@@ -75,6 +75,7 @@ export default class MnemoBooleanPresentation extends Component<
         <SvgStyleTag
           name={this.props.varitem.name}
           value={this.props.varitem.value}
+          floating={true}
         />
         <div
           style={{
@@ -84,12 +85,11 @@ export default class MnemoBooleanPresentation extends Component<
             color: "#f00",
             fontStyle: "italic",
             fontSize: "14px",
-            // fontWeight: "bold",
           }}
         >
           {this.props.text}(
-          <div style={{ display: "inline", position: "relative", top: "-1px" }}>
-            <input
+          <div style={{ display: "inline", position: "relative", }}>
+            {/* <input
               type="button"
               style={{
                 borderRadius: "12px",
@@ -103,9 +103,10 @@ export default class MnemoBooleanPresentation extends Component<
                 backgroundColor: this.props.varitem.value ? "#0f0" : "#ddd",
               }}
               disabled
-            />
+            /> */}
             <input
-              type="button"
+              type="text"
+              disabled
               value={this.props.varitem.name}
               style={{
                 paddingLeft: "12px",
@@ -113,12 +114,28 @@ export default class MnemoBooleanPresentation extends Component<
                 border: "0px",
                 paddingRight: "2px",
                 borderRadius: "3px",
+                width: "30px",
+                background: "#ff0",
               }}
-              onClick={() => {
-                this.props.varitem.value
-                  ? this.props.writeValue(this.props.varitem, false)
-                  : this.props.writeValue(this.props.varitem, true);
+
+            /> 
+            <input
+              type="text"
+              disabled
+              value={this.props.varitem.value}
+              style={{
+                position: "absolute",
+                left: "0px",
+                top: "20px",
+                paddingLeft: "12px",
+                fontSize: "14px",
+                border: "0px",
+                paddingRight: "2px",
+                borderRadius: "3px",
+                width: "30px",
+                background: "#ff0",
               }}
+
             />
           </div>
           )
