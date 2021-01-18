@@ -4,7 +4,7 @@ import Axios from "axios";
 import parse from "url-parse";
 import MnemoBooleanPresentation from "./MnemoBooleanPresentation";
 
-import Page2  from "./md_mnemo/page2";
+import Page2 from "./md_mnemo/page2";
 import SvgStyles from "./svgmd/SvgStyles";
 
 interface iProps {}
@@ -13,6 +13,7 @@ interface iState {
 
   user_var: iPlcVar[];
   additional_key: number;
+  show_names: boolean;
 }
 
 function getState(): iState {
@@ -20,6 +21,7 @@ function getState(): iState {
     plc_vars: [],
     user_var: [],
     additional_key: 0,
+    show_names: true,
   };
   return ret;
 }
@@ -123,7 +125,7 @@ export default class MnemoMD extends Component<iProps, iState> {
 
   render() {
     return (
-      <div style={{backgroundColor: "#fff"}}>
+      <div style={{ backgroundColor: "#fff" }}>
         <div
           style={{
             position: "relative",
@@ -149,7 +151,6 @@ export default class MnemoMD extends Component<iProps, iState> {
           ) : (
             " "
           )}
-
           {this.getPlcVarIndexByName("Y2") != -1 ? (
             <MnemoBooleanPresentation
               key={`${
@@ -166,16 +167,77 @@ export default class MnemoMD extends Component<iProps, iState> {
           ) : (
             " "
           )}
-
-          {this.getPlcVarIndexByName("Y2") != -1 ? (
+          {this.getPlcVarIndexByName("Y16") != -1 ? (
+            <MnemoBooleanPresentation
+              key={`${
+                this.state.plc_vars[this.getPlcVarIndexByName("Y16")].id
+              }_add_key_${this.state.additional_key}`}
+              varitem={this.state.plc_vars[this.getPlcVarIndexByName("Y16")]}
+              value_change={this.value_changed}
+              writeValue={this.writeValue}
+              useritem={this.state.user_var[this.getPlcVarIndexByName("Y16")]}
+              left="470px"
+              top="110px"
+              text=""
+            />
+          ) : (
+            " "
+          )}
+          {this.getPlcVarIndexByName("Y17") != -1 ? (
+            <MnemoBooleanPresentation
+              key={`${
+                this.state.plc_vars[this.getPlcVarIndexByName("Y17")].id
+              }_add_key_${this.state.additional_key}`}
+              varitem={this.state.plc_vars[this.getPlcVarIndexByName("Y17")]}
+              value_change={this.value_changed}
+              writeValue={this.writeValue}
+              useritem={this.state.user_var[this.getPlcVarIndexByName("Y17")]}
+              left="570px"
+              top="115px"
+              text="Распределитель Р12"
+            />
+          ) : (
+            " "
+          )}
+          {this.getPlcVarIndexByName("Y18") != -1 ? (
+            <MnemoBooleanPresentation
+              key={`${
+                this.state.plc_vars[this.getPlcVarIndexByName("Y18")].id
+              }_add_key_${this.state.additional_key}`}
+              varitem={this.state.plc_vars[this.getPlcVarIndexByName("Y18")]}
+              value_change={this.value_changed}
+              writeValue={this.writeValue}
+              useritem={this.state.user_var[this.getPlcVarIndexByName("Y18")]}
+              left="700px"
+              top="160px"
+              text="Распределитель Р11"
+            />
+          ) : (
+            " "
+          )}
+          {this.getPlcVarIndexByName("Y16") != -1 ? (
             <SvgStyles
+              show_names={this.state.show_names}
               Y1={this.state.plc_vars[this.getPlcVarIndexByName("Y1")].value}
               Y2={this.state.plc_vars[this.getPlcVarIndexByName("Y2")].value}
+              Y16={this.state.plc_vars[this.getPlcVarIndexByName("Y16")].value}
+              Y17={this.state.plc_vars[this.getPlcVarIndexByName("Y17")].value}
+              Y18={this.state.plc_vars[this.getPlcVarIndexByName("Y18")].value}
             />
           ) : (
             ""
           )}
           <Page2 />
+          names:{"  "}
+          <input
+            type="button"
+            onClick={() => {
+              if (this.state.show_names) this.setState({ show_names: false });
+              else this.setState({ show_names: true });
+            }}
+            value={this.state.show_names ? "hide" : "display"}
+            style={{ position: "absolute" }}
+          />
         </div>
       </div>
     );

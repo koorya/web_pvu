@@ -38,7 +38,7 @@ export default class SvgMD extends Component<iProps, iState> {
           value="off Y2"
           onClick={() => this.setState({ Y2: false })}
         />
-        <SvgStyles Y1={this.state.Y1} Y2={this.state.Y2} />
+        {/* <SvgStyles Y1={this.state.Y1} Y2={this.state.Y2} /> */}
         <SvgComponent />
       </div>
     );

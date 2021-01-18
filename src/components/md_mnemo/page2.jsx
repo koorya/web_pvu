@@ -3638,7 +3638,7 @@ function SvgComponent(props) {
               height="100%"
             />
           </g>
-          <g id="names" display="inline" fill="red" fillOpacity={1}>
+          <g id="names" display="none" fill="red" fillOpacity={1}>
             <g id="g1452">
               <use
                 xlinkHref="#glyph3-1"
