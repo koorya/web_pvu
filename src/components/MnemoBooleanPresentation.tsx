@@ -110,7 +110,7 @@ export default class MnemoBooleanPresentation extends Component<
               style={{
                 paddingLeft: "12px",
                 fontSize: "14px",
-                border: "0px",
+                border: "0.5px solid",
                 paddingRight: "2px",
                 borderRadius: "3px",
               }}

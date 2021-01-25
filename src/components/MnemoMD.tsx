@@ -1,15 +1,33 @@
 import React, { Component } from "react";
+
+import ReactDOM from "react-dom";
+import {
+  BrowserRouter as Router,
+  Switch,
+  Route,
+  useParams,
+  withRouter,
+  RouteComponentProps,
+  Link,
+} from "react-router-dom";
+
 import { iPlcVar } from "./iPlcVar";
 import Axios from "axios";
 import parse from "url-parse";
 import MnemoBooleanPresentation from "./MnemoBooleanPresentation";
 
+import Page1 from "./md_mnemo/page1";
 import Page2 from "./md_mnemo/page2";
+import Page3 from "./md_mnemo/page3";
 import SvgStyles from "./svgmd/SvgStyles";
 import SvgStyleTag from "./svgmd/SvgStyleTag";
 import MnemoNumericPresentation from "./MnemoNumericPresentation";
 
-interface iProps {}
+interface MatchParams {
+  page_id: string;
+}
+
+interface iProps extends RouteComponentProps<MatchParams> {}
 interface iState {
   plc_vars: iPlcVar[];
 
@@ -28,7 +46,7 @@ function getState(): iState {
   return ret;
 }
 
-export default class MnemoMD extends Component<iProps, iState> {
+class MnemoMD extends Component<iProps, iState> {
   state = getState();
   svg_ref = React.createRef<HTMLDocument>();
   timerID: NodeJS.Timeout;
@@ -126,6 +144,8 @@ export default class MnemoMD extends Component<iProps, iState> {
   };
 
   render() {
+    const page_number = Number(this.props.match.params.page_id);
+
     return (
       <div style={{ backgroundColor: "#fff" }}>
         <div
@@ -137,252 +157,28 @@ export default class MnemoMD extends Component<iProps, iState> {
             padding: "0px",
           }}
         >
-          {this.getPlcVarIndexByName("Y1") != -1 ? (
-            <MnemoBooleanPresentation
-              key={`${
-                this.state.plc_vars[this.getPlcVarIndexByName("Y1")].id
-              }_add_key_${this.state.additional_key}`}
-              varitem={this.state.plc_vars[this.getPlcVarIndexByName("Y1")]}
-              value_change={this.value_changed}
-              writeValue={this.writeValue}
-              useritem={this.state.user_var[this.getPlcVarIndexByName("Y1")]}
-              left="180px"
-              top="313px"
-              text="Распределитель Р1"
-            />
-          ) : (
-            " "
-          )}
-          {this.getPlcVarIndexByName("Y2") != -1 ? (
-            <MnemoBooleanPresentation
-              key={`${
-                this.state.plc_vars[this.getPlcVarIndexByName("Y2")].id
-              }_add_key_${this.state.additional_key}`}
-              varitem={this.state.plc_vars[this.getPlcVarIndexByName("Y2")]}
-              value_change={this.value_changed}
-              writeValue={this.writeValue}
-              useritem={this.state.user_var[this.getPlcVarIndexByName("Y2")]}
-              left="220px"
-              top="278px"
-              text="Распределитель Р2"
-            />
-          ) : (
-            " "
-          )}
-          {this.getPlcVarIndexByName("Y16") != -1 ? (
-            <MnemoBooleanPresentation
-              key={`${
-                this.state.plc_vars[this.getPlcVarIndexByName("Y16")].id
-              }_add_key_${this.state.additional_key}`}
-              varitem={this.state.plc_vars[this.getPlcVarIndexByName("Y16")]}
-              value_change={this.value_changed}
-              writeValue={this.writeValue}
-              useritem={this.state.user_var[this.getPlcVarIndexByName("Y16")]}
-              left="505px"
-              top="118px"
-              text=""
-            />
-          ) : (
-            " "
-          )}
-          {this.getPlcVarIndexByName("Y17") != -1 ? (
-            <MnemoBooleanPresentation
-              key={`${
-                this.state.plc_vars[this.getPlcVarIndexByName("Y17")].id
-              }_add_key_${this.state.additional_key}`}
-              varitem={this.state.plc_vars[this.getPlcVarIndexByName("Y17")]}
-              value_change={this.value_changed}
-              writeValue={this.writeValue}
-              useritem={this.state.user_var[this.getPlcVarIndexByName("Y17")]}
-              left="568px"
-              top="118px"
-              text="Распределитель Р11"
-            />
-          ) : (
-            " "
-          )}
-          {this.getPlcVarIndexByName("Y18") != -1 ? (
-            <MnemoBooleanPresentation
-              key={`${
-                this.state.plc_vars[this.getPlcVarIndexByName("Y18")].id
-              }_add_key_${this.state.additional_key}`}
-              varitem={this.state.plc_vars[this.getPlcVarIndexByName("Y18")]}
-              value_change={this.value_changed}
-              writeValue={this.writeValue}
-              useritem={this.state.user_var[this.getPlcVarIndexByName("Y18")]}
-              left="700px"
-              top="160px"
-              text="Распределитель Р12"
-            />
-          ) : (
-            " "
-          )}
-          {this.getPlcVarIndexByName("Y9") != -1 ? (
-            <MnemoBooleanPresentation
-              key={`${
-                this.state.plc_vars[this.getPlcVarIndexByName("Y9")].id
-              }_add_key_${this.state.additional_key}`}
-              varitem={this.state.plc_vars[this.getPlcVarIndexByName("Y9")]}
-              value_change={this.value_changed}
-              writeValue={this.writeValue}
-              useritem={this.state.user_var[this.getPlcVarIndexByName("Y9")]}
-              left="1020px"
-              top="240px"
-              text="Распределитель Р7"
-            />
-          ) : (
-            " "
-          )}
-          {this.getPlcVarIndexByName("Y8") != -1 ? (
-            <MnemoBooleanPresentation
-              key={`${
-                this.state.plc_vars[this.getPlcVarIndexByName("Y8")].id
-              }_add_key_${this.state.additional_key}`}
-              varitem={this.state.plc_vars[this.getPlcVarIndexByName("Y8")]}
-              value_change={this.value_changed}
-              writeValue={this.writeValue}
-              useritem={this.state.user_var[this.getPlcVarIndexByName("Y8")]}
-              left="1200px"
-              top="240px"
-              text=""
-            />
-          ) : (
-            " "
-          )}
-          {this.getPlcVarIndexByName("Y10") != -1 ? (
-            <MnemoBooleanPresentation
-              key={`${
-                this.state.plc_vars[this.getPlcVarIndexByName("Y10")].id
-              }_add_key_${this.state.additional_key}`}
-              varitem={this.state.plc_vars[this.getPlcVarIndexByName("Y10")]}
-              value_change={this.value_changed}
-              writeValue={this.writeValue}
-              useritem={this.state.user_var[this.getPlcVarIndexByName("Y10")]}
-              left="760px"
-              top="280px"
-              text="Распределитель Р8"
-            />
-          ) : (
-            " "
-          )}
-          {this.getPlcVarIndexByName("Y11") != -1 ? (
-            <MnemoBooleanPresentation
-              key={`${
-                this.state.plc_vars[this.getPlcVarIndexByName("Y11")].id
-              }_add_key_${this.state.additional_key}`}
-              varitem={this.state.plc_vars[this.getPlcVarIndexByName("Y11")]}
-              value_change={this.value_changed}
-              writeValue={this.writeValue}
-              useritem={this.state.user_var[this.getPlcVarIndexByName("Y11")]}
-              left="940px"
-              top="280px"
-              text=""
-            />
-          ) : (
-            " "
-          )}
-          {this.getPlcVarIndexByName("Y13") != -1 ? (
-            <MnemoBooleanPresentation
-              key={`${
-                this.state.plc_vars[this.getPlcVarIndexByName("Y13")].id
-              }_add_key_${this.state.additional_key}`}
-              varitem={this.state.plc_vars[this.getPlcVarIndexByName("Y13")]}
-              value_change={this.value_changed}
-              writeValue={this.writeValue}
-              useritem={this.state.user_var[this.getPlcVarIndexByName("Y13")]}
-              left="705px"
-              top="344px"
-              text="Распределитель Р9"
-            />
-          ) : (
-            " "
-          )}
-          {this.getPlcVarIndexByName("Y12") != -1 ? (
-            <MnemoBooleanPresentation
-              key={`${
-                this.state.plc_vars[this.getPlcVarIndexByName("Y12")].id
-              }_add_key_${this.state.additional_key}`}
-              varitem={this.state.plc_vars[this.getPlcVarIndexByName("Y12")]}
-              value_change={this.value_changed}
-              writeValue={this.writeValue}
-              useritem={this.state.user_var[this.getPlcVarIndexByName("Y12")]}
-              left="880px"
-              top="344px"
-              text=""
-            />
-          ) : (
-            " "
-          )}
-          {this.getPlcVarIndexByName("Y14") != -1 ? (
-            <MnemoBooleanPresentation
-              key={`${
-                this.state.plc_vars[this.getPlcVarIndexByName("Y14")].id
-              }_add_key_${this.state.additional_key}`}
-              varitem={this.state.plc_vars[this.getPlcVarIndexByName("Y14")]}
-              value_change={this.value_changed}
-              writeValue={this.writeValue}
-              useritem={this.state.user_var[this.getPlcVarIndexByName("Y14")]}
-              left="630px"
-              top="480px"
-              text="Распределитель Р10"
-            />
-          ) : (
-            " "
-          )}
-          {this.getPlcVarIndexByName("Y15") != -1 ? (
-            <MnemoBooleanPresentation
-              key={`${
-                this.state.plc_vars[this.getPlcVarIndexByName("Y15")].id
-              }_add_key_${this.state.additional_key}`}
-              varitem={this.state.plc_vars[this.getPlcVarIndexByName("Y15")]}
-              value_change={this.value_changed}
-              writeValue={this.writeValue}
-              useritem={this.state.user_var[this.getPlcVarIndexByName("Y15")]}
-              left="830px"
-              top="480px"
-              text=""
-            />
-          ) : (
-            " "
-          )}
-          {this.getPlcVarIndexByName("BP4") != -1 ? (
-            <MnemoNumericPresentation
-              key={`${
-                this.state.plc_vars[this.getPlcVarIndexByName("BP4")].id
-              }_add_key_${this.state.additional_key}`}
-              varitem={this.state.plc_vars[this.getPlcVarIndexByName("BP4")]}
-              value_change={this.value_changed}
-              writeValue={this.writeValue}
-              useritem={this.state.user_var[this.getPlcVarIndexByName("BP4")]}
-              left="630px"
-              top="555px"
-              text="Датчик давления ДД4"
-            />
-          ) : (
-            " "
-          )}
-          
-          {this.getPlcVarIndexByName("PP4") != -1 ? (
-            <MnemoNumericPresentation
-              key={`${
-                this.state.plc_vars[this.getPlcVarIndexByName("PP4")].id
-              }_add_key_${this.state.additional_key}`}
-              varitem={this.state.plc_vars[this.getPlcVarIndexByName("PP4")]}
-              value_change={this.value_changed}
-              writeValue={this.writeValue}
-              useritem={this.state.user_var[this.getPlcVarIndexByName("PP4")]}
-              left="530px"
-              top="709px"
-              text="Разъем датчика положения золотника"
-            />
-          ) : (
-            " "
-          )}
+          {page_number == 1 ? <Page1 /> : ""}
+          {page_number == 2 ? this.page2_text() : ""}
+          {page_number == 3 ? this.page3_text() : ""}
 
+          {this.get_boolean_handle_text("K5", "Реле включения/выключения распределения питания +24 (силовая нагрузка)", 0, 0)}
 
-          <Page2 />
+          {this.get_boolean_handle_text("K2", "", 20, 0)}
+          {this.get_numeric_handle_text("FC2_command", "", 40, 0, true)}
+          {this.get_numeric_handle_text("FC2_freq", "", 80, 0, true)}
 
           <SvgStyleTag name="names" value={this.state.show_names} />
+          <ul style={{ listStyle: "none", display: "inline" }}>
+            <li style={{ display: "inline", marginRight: "5px" }}>
+              <Link to="/md/1">1</Link>
+            </li>
+            <li style={{ display: "inline", marginRight: "5px" }}>
+              <Link to="/md/2">2</Link>
+            </li>
+            <li style={{ display: "inline", marginRight: "5px" }}>
+              <Link to="/md/3">3</Link>
+            </li>
+          </ul>
           names:{"  "}
           <input
             type="button"
@@ -397,4 +193,286 @@ export default class MnemoMD extends Component<iProps, iState> {
       </div>
     );
   }
+  get_numeric_handle_text = (
+    prop_name: string,
+    text: string,
+    top: number,
+    left: number,
+    changeable?: boolean
+  ) => {
+    return this.getPlcVarIndexByName(prop_name) != -1 ? (
+      <MnemoNumericPresentation
+        key={`${
+          this.state.plc_vars[this.getPlcVarIndexByName(prop_name)].id
+        }_add_key_${this.state.additional_key}`}
+        varitem={this.state.plc_vars[this.getPlcVarIndexByName(prop_name)]}
+        value_change={this.value_changed}
+        writeValue={this.writeValue}
+        useritem={this.state.user_var[this.getPlcVarIndexByName(prop_name)]}
+        left={`${left}px`}
+        top={`${top}px`}
+        text={text}
+        changeable = {changeable}
+      />
+    ) : (
+      " "
+    );
+  };
+  get_boolean_handle_text = (
+    prop_name: string,
+    text: string,
+    top: number,
+    left: number
+  ) => {
+    if (this.getPlcVarIndexByName("Y2") == -1) return "";
+    return (
+      <MnemoBooleanPresentation
+        key={`${
+          this.state.plc_vars[this.getPlcVarIndexByName(prop_name)].id
+        }_add_key_${this.state.additional_key}`}
+        varitem={this.state.plc_vars[this.getPlcVarIndexByName(prop_name)]}
+        value_change={this.value_changed}
+        writeValue={this.writeValue}
+        useritem={this.state.user_var[this.getPlcVarIndexByName(prop_name)]}
+        left={`${left}px`}
+        top={`${top}px`}
+        text={text}
+      />
+    );
+  };
+  page2_text = () => {
+    if (this.getPlcVarIndexByName("Y2") == -1) return "";
+
+    return (
+      <div>
+        <MnemoBooleanPresentation
+          key={`${
+            this.state.plc_vars[this.getPlcVarIndexByName("Y1")].id
+          }_add_key_${this.state.additional_key}`}
+          varitem={this.state.plc_vars[this.getPlcVarIndexByName("Y1")]}
+          value_change={this.value_changed}
+          writeValue={this.writeValue}
+          useritem={this.state.user_var[this.getPlcVarIndexByName("Y1")]}
+          left="180px"
+          top="313px"
+          text="Распределитель Р1"
+        />
+        <MnemoBooleanPresentation
+          key={`${
+            this.state.plc_vars[this.getPlcVarIndexByName("Y2")].id
+          }_add_key_${this.state.additional_key}`}
+          varitem={this.state.plc_vars[this.getPlcVarIndexByName("Y2")]}
+          value_change={this.value_changed}
+          writeValue={this.writeValue}
+          useritem={this.state.user_var[this.getPlcVarIndexByName("Y2")]}
+          left="220px"
+          top="278px"
+          text="Распределитель Р2"
+        />
+        <MnemoBooleanPresentation
+          key={`${
+            this.state.plc_vars[this.getPlcVarIndexByName("Y16")].id
+          }_add_key_${this.state.additional_key}`}
+          varitem={this.state.plc_vars[this.getPlcVarIndexByName("Y16")]}
+          value_change={this.value_changed}
+          writeValue={this.writeValue}
+          useritem={this.state.user_var[this.getPlcVarIndexByName("Y16")]}
+          left="505px"
+          top="118px"
+          text=""
+        />
+        <MnemoBooleanPresentation
+          key={`${
+            this.state.plc_vars[this.getPlcVarIndexByName("Y17")].id
+          }_add_key_${this.state.additional_key}`}
+          varitem={this.state.plc_vars[this.getPlcVarIndexByName("Y17")]}
+          value_change={this.value_changed}
+          writeValue={this.writeValue}
+          useritem={this.state.user_var[this.getPlcVarIndexByName("Y17")]}
+          left="568px"
+          top="118px"
+          text="Распределитель Р11"
+        />
+        <MnemoBooleanPresentation
+          key={`${
+            this.state.plc_vars[this.getPlcVarIndexByName("Y18")].id
+          }_add_key_${this.state.additional_key}`}
+          varitem={this.state.plc_vars[this.getPlcVarIndexByName("Y18")]}
+          value_change={this.value_changed}
+          writeValue={this.writeValue}
+          useritem={this.state.user_var[this.getPlcVarIndexByName("Y18")]}
+          left="700px"
+          top="160px"
+          text="Распределитель Р12"
+        />
+        <MnemoBooleanPresentation
+          key={`${
+            this.state.plc_vars[this.getPlcVarIndexByName("Y9")].id
+          }_add_key_${this.state.additional_key}`}
+          varitem={this.state.plc_vars[this.getPlcVarIndexByName("Y9")]}
+          value_change={this.value_changed}
+          writeValue={this.writeValue}
+          useritem={this.state.user_var[this.getPlcVarIndexByName("Y9")]}
+          left="1020px"
+          top="240px"
+          text="Распределитель Р7"
+        />
+        <MnemoBooleanPresentation
+          key={`${
+            this.state.plc_vars[this.getPlcVarIndexByName("Y8")].id
+          }_add_key_${this.state.additional_key}`}
+          varitem={this.state.plc_vars[this.getPlcVarIndexByName("Y8")]}
+          value_change={this.value_changed}
+          writeValue={this.writeValue}
+          useritem={this.state.user_var[this.getPlcVarIndexByName("Y8")]}
+          left="1200px"
+          top="240px"
+          text=""
+        />
+        <MnemoBooleanPresentation
+          key={`${
+            this.state.plc_vars[this.getPlcVarIndexByName("Y10")].id
+          }_add_key_${this.state.additional_key}`}
+          varitem={this.state.plc_vars[this.getPlcVarIndexByName("Y10")]}
+          value_change={this.value_changed}
+          writeValue={this.writeValue}
+          useritem={this.state.user_var[this.getPlcVarIndexByName("Y10")]}
+          left="760px"
+          top="280px"
+          text="Распределитель Р8"
+        />
+        <MnemoBooleanPresentation
+          key={`${
+            this.state.plc_vars[this.getPlcVarIndexByName("Y11")].id
+          }_add_key_${this.state.additional_key}`}
+          varitem={this.state.plc_vars[this.getPlcVarIndexByName("Y11")]}
+          value_change={this.value_changed}
+          writeValue={this.writeValue}
+          useritem={this.state.user_var[this.getPlcVarIndexByName("Y11")]}
+          left="940px"
+          top="280px"
+          text=""
+        />
+        <MnemoBooleanPresentation
+          key={`${
+            this.state.plc_vars[this.getPlcVarIndexByName("Y13")].id
+          }_add_key_${this.state.additional_key}`}
+          varitem={this.state.plc_vars[this.getPlcVarIndexByName("Y13")]}
+          value_change={this.value_changed}
+          writeValue={this.writeValue}
+          useritem={this.state.user_var[this.getPlcVarIndexByName("Y13")]}
+          left="705px"
+          top="344px"
+          text="Распределитель Р9"
+        />
+        <MnemoBooleanPresentation
+          key={`${
+            this.state.plc_vars[this.getPlcVarIndexByName("Y12")].id
+          }_add_key_${this.state.additional_key}`}
+          varitem={this.state.plc_vars[this.getPlcVarIndexByName("Y12")]}
+          value_change={this.value_changed}
+          writeValue={this.writeValue}
+          useritem={this.state.user_var[this.getPlcVarIndexByName("Y12")]}
+          left="880px"
+          top="344px"
+          text=""
+        />
+        <MnemoBooleanPresentation
+          key={`${
+            this.state.plc_vars[this.getPlcVarIndexByName("Y14")].id
+          }_add_key_${this.state.additional_key}`}
+          varitem={this.state.plc_vars[this.getPlcVarIndexByName("Y14")]}
+          value_change={this.value_changed}
+          writeValue={this.writeValue}
+          useritem={this.state.user_var[this.getPlcVarIndexByName("Y14")]}
+          left="630px"
+          top="480px"
+          text="Распределитель Р10"
+        />
+        <MnemoBooleanPresentation
+          key={`${
+            this.state.plc_vars[this.getPlcVarIndexByName("Y15")].id
+          }_add_key_${this.state.additional_key}`}
+          varitem={this.state.plc_vars[this.getPlcVarIndexByName("Y15")]}
+          value_change={this.value_changed}
+          writeValue={this.writeValue}
+          useritem={this.state.user_var[this.getPlcVarIndexByName("Y15")]}
+          left="830px"
+          top="480px"
+          text=""
+        />
+        {this.get_numeric_handle_text("BP4", "Датчик давления ДД4", 555, 630)}
+
+
+        {this.get_boolean_handle_text("HPV3_EN", "Регулятор расхода РР3", 645, 990)}
+        {this.get_numeric_handle_text("YPP3_Iref", "", 685, 1140, true)}
+        {this.get_boolean_handle_text("HPV3_RAMP", "", 665, 1140)}
+
+        {this.get_boolean_handle_text("HPV4_EN", "Регулятор расхода РР4", 709, 530)}
+        {this.get_numeric_handle_text("YPP4_Iref", "", 749, 680, true)}
+        {this.get_boolean_handle_text("HPV4_RAMP", "", 729, 680)}
+
+
+
+
+        {this.get_numeric_handle_text("BP3", "Датчик давления ДД3", 565, 1010)}
+        {this.get_numeric_handle_text("BP1", "Датчик давления ДД1", 550, 20)}
+        {this.get_numeric_handle_text("SP4", "Рэле давления РД4", 585, 30)}
+        {this.get_numeric_handle_text("SP1", "Рэле давления РД1", 623, 30)}
+        {this.get_numeric_handle_text("SP2", "Рэле давления РД2", 682, 75)}
+        {this.get_numeric_handle_text("SP3", "Рэле давления РД3", 720, 120)}
+        {this.get_numeric_handle_text("BP2", "Датчик давления ДД2", 752, 160)}
+        <Page2 />
+      </div>
+    );
+  };
+
+  page3_text = () => {
+    if (this.getPlcVarIndexByName("Y2") == -1) return "";
+
+    return (
+      <div>
+        {/* <MnemoBooleanPresentation
+          key={`${
+            this.state.plc_vars[this.getPlcVarIndexByName("Y15")].id
+          }_add_key_${this.state.additional_key}`}
+          varitem={this.state.plc_vars[this.getPlcVarIndexByName("Y15")]}
+          value_change={this.value_changed}
+          writeValue={this.writeValue}
+          useritem={this.state.user_var[this.getPlcVarIndexByName("Y15")]}
+          left="830px"
+          top="480px"
+          text=""
+        /> */}
+        {this.get_boolean_handle_text("Y3", "Распределитель Р3", 643, 508)}
+        {this.get_boolean_handle_text("Y4", "Распределитель Р4", 475, 30)}
+        {this.get_boolean_handle_text("Y5", "", 475, 220)}
+        {this.get_boolean_handle_text("Y6", "Распределитель Р5", 740, 510)}
+        {this.get_boolean_handle_text("Y7", "Распределитель Р6", 693, 514)}
+
+        {this.get_boolean_handle_text("HPV1_EN", "Регулятор расхода РР1", 465, 540)}
+        {this.get_numeric_handle_text("YPP1_Iref", "", 505, 690, true)}
+        {this.get_boolean_handle_text("HPV1_RAMP", "", 485, 690)}
+
+        {this.get_boolean_handle_text("HPV2_EN", "Регулятор расхода РР1", 265, 140)}
+        {this.get_numeric_handle_text("YPP2_Iref", "", 305, 290, true)}
+        {this.get_boolean_handle_text("HPV2_RAMP", "", 285, 290)}
+
+
+
+        {this.get_numeric_handle_text("SP12", "Рэле давления Д12", 20, 694)}
+        {this.get_numeric_handle_text("SP11", "Рэле давления Д11", 52, 750)}
+        {this.get_numeric_handle_text("SP10", "Рэле давления Д10", 80, 808)}
+        {this.get_numeric_handle_text("SP9", "Рэле давления Д9", 110, 861)}
+        {this.get_numeric_handle_text("SP8", "Рэле давления Д8", 140, 915)}
+        {this.get_numeric_handle_text("SP7", "Рэле давления Д7", 170, 976)}
+        {this.get_numeric_handle_text("SP6", "Рэле давления Д6", 200, 1034)}
+        {this.get_numeric_handle_text("SP5", "Рэле давления Д5", 233, 1084)}
+
+        <Page3 />
+      </div>
+    );
+  };
 }
+
+export default withRouter(MnemoMD);

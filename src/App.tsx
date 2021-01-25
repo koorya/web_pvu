@@ -16,10 +16,10 @@ class App extends Component {
         <BrowserRouter>
           <Switch>
             <Route exact path="/home" component={VarList} />
-            <Route exact path="/md" component={MnemoMD} />
+            <Route exact path="/md/:page_id" component={MnemoMD} />
             <Route exact path="/svgmd" component={SvgMD} />
             <Route exact path="/image" component={Image} />
-            <Redirect from="/" to="/md" />
+            <Redirect from="/" to="/md/3" />
           </Switch>
         </BrowserRouter>
       </div>

@@ -11,6 +11,7 @@ interface iProps {
   text: string;
   value_change: (item: iPlcVar, value: any) => void;
   writeValue: (changed_item: iPlcVar, value: any) => boolean;
+  changeable?: boolean;
 }
 interface iState {
   user_value: any;
@@ -37,7 +38,7 @@ export default class MnemoNumericPresentation extends Component<
     const new_value = e.target.value;
 
     this.setState({ user_value: new_value });
-    if (this.input.current.reportValidity())
+    if (Number(e.target.value) >= 0 && Number(e.target.value) <=  32767)
       this.props.value_change(this.props.varitem, new_value);
   };
 
@@ -54,9 +55,10 @@ export default class MnemoNumericPresentation extends Component<
   };
 
   writeValue = () => {
+    console.log(`value to send ${this.state.user_value}`);
+
     const write_val = new Promise<void>((resolve, reject) => {
       if (
-        this.input.current.reportValidity() &&
         this.props.writeValue(this.props.varitem, this.state.user_value)
       ) {
         resolve();
@@ -64,6 +66,7 @@ export default class MnemoNumericPresentation extends Component<
     });
     write_val.then(() => {
       // this.onChange({ target: { value: this.props.varitem.value, name: "" } });
+      // this.setState({ user_value: value[0] });
 
       console.log(`value updated ${this.props.varitem.value}`);
     });
@@ -109,17 +112,55 @@ export default class MnemoNumericPresentation extends Component<
               disabled
               value={this.props.varitem.name}
               style={{
-                paddingLeft: "12px",
+                paddingLeft: "5px",
                 fontSize: "14px",
                 border: "0px",
                 paddingRight: "2px",
                 borderRadius: "3px",
-                width: "30px",
-                background: "#ff0",
+                width: "55px",
+                background: "#afa",
               }}
 
             /> 
+            {this.props.changeable ? (
+            <div style={{display: "inline"}} >
             <input
+              type="number"
+              onChange = {this.onChange}
+              onKeyUp = {(event)=>{if(event.key === "Enter") this.writeValue()}}
+              value={this.state.user_value}
+              style={{
+                position: "absolute",
+                left: "0px",
+                top: "20px",
+                paddingLeft: "5px",
+                fontSize: "14px",
+                border: "0.5px solid",
+                paddingRight: "2px",
+                borderRadius: "3px",
+                width: "55px",
+                background: this.state.user_value == this.props.varitem.value ? "#afa" : "#ffa",
+              }}
+
+            />
+            <input type="button" value = "w"
+            disabled = {this.state.user_value == this.props.varitem.value ? true:false}
+            onClick={(e) => this.writeValue()}
+                          style={{
+                            position: "absolute",
+                            left: "65px",
+                            top: "20px",
+                            paddingLeft: "2px",
+                            fontSize: "14px",
+                            border: "0.5px solid",
+                            paddingRight: "2px",
+                            borderRadius: "3px",
+                            width: "20px",
+                            background: "#0aa",
+                          }}/>
+            </div>
+            ) : (
+              <input
               type="text"
               disabled
               value={this.props.varitem.value}
@@ -127,16 +168,17 @@ export default class MnemoNumericPresentation extends Component<
                 position: "absolute",
                 left: "0px",
                 top: "20px",
-                paddingLeft: "12px",
+                paddingLeft: "5px",
                 fontSize: "14px",
                 border: "0px",
                 paddingRight: "2px",
                 borderRadius: "3px",
-                width: "30px",
-                background: "#ff0",
+                width: "55px",
+                background: "#afa",
               }}
 
             />
+            )}
           </div>
           )
         </div>
