@@ -1,6 +1,5 @@
 import React, { Component } from "react";
 import { iPlcVar } from "./iPlcVar";
-import SvgStyleTag from "./svgmd/SvgStyleTag";
 
 interface iProps {
   key: any;
@@ -42,9 +41,13 @@ export default class MnemoBooleanPresentation extends Component<
   };
 
   componentDidMount() {
-    this.setState({ user_value: this.props.useritem.value });
+    if(this.props.useritem !== undefined)
+      this.setState({ user_value: this.props.useritem.value });
   }
-  componentDidUpdate() {}
+
+  componentDidUpdate() {
+    
+  }
 
   resetValue = () => {
     this.setState(() => {
@@ -70,12 +73,11 @@ export default class MnemoBooleanPresentation extends Component<
   };
 
   render() {
+    if(this.props.varitem === undefined)
+      return ""
+    else
     return (
       <div>
-        <SvgStyleTag
-          name={this.props.varitem.name}
-          value={this.props.varitem.value}
-        />
         <div
           style={{
             position: "absolute",

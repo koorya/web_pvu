@@ -92,36 +92,20 @@ export default class MnemoNumericPresentation extends Component<
         >
           {this.props.text}(
           <div style={{ display: "inline", position: "relative", }}>
-            {/* <input
-              type="button"
+            <div
               style={{
-                borderRadius: "12px",
-                height: "12px",
-                width: "12px",
-                position: "relative",
-                top: "1px",
-                padding: "0px",
-                marginRight: "-13px",
-                marginLeft: "2px",
-                backgroundColor: this.props.varitem.value ? "#0f0" : "#ddd",
-              }}
-              disabled
-            /> */}
-            <input
-              type="text"
-              disabled
-              value={this.props.varitem.name}
-              style={{
-                paddingLeft: "5px",
+                // paddingLeft: "5px",
                 fontSize: "14px",
                 border: "0px",
-                paddingRight: "2px",
+                // paddingRight: "2px",
                 borderRadius: "3px",
-                width: "55px",
-                background: "#afa",
+                width: "auto",
+                display: "inline",
+                // background: "#afa",
               }}
-
-            /> 
+              >
+              {this.props.varitem.name}
+            </div> 
             {this.props.changeable ? (
             <div style={{display: "inline"}} >
             <input

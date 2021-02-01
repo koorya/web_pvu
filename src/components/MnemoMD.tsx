@@ -22,6 +22,7 @@ import Page3 from "./md_mnemo/page3";
 import SvgStyles from "./svgmd/SvgStyles";
 import SvgStyleTag from "./svgmd/SvgStyleTag";
 import MnemoNumericPresentation from "./MnemoNumericPresentation";
+import MnemoBooleanPresentationStyled from "./MnemoBooleanPresentationStyled";
 
 interface MatchParams {
   page_id: string;
@@ -160,13 +161,60 @@ class MnemoMD extends Component<iProps, iState> {
           {page_number == 1 ? <Page1 /> : ""}
           {page_number == 2 ? this.page2_text() : ""}
           {page_number == 3 ? this.page3_text() : ""}
-
-          {this.get_boolean_handle_text("K5", "Реле включения/выключения распределения питания +24 (силовая нагрузка)", 0, 0)}
-
-          {this.get_boolean_handle_text("K2", "", 20, 0)}
-          {this.get_numeric_handle_text("FC2_command", "", 40, 0, true)}
-          {this.get_numeric_handle_text("FC2_freq", "", 80, 0, true)}
-
+          {this.get_boolean_handle_text(
+            "K5",
+            "Реле включения/выключения распределения питания +24 (силовая нагрузка)",
+            0,
+            0
+          )}
+          <div
+            style={{
+              position: "absolute",
+              left: "0px",
+              top: "100px",
+            }}
+          >
+            {this.get_FC_handle_text("FC1")}
+          </div>
+          <div
+            style={{
+              position: "absolute",
+              left: "100px",
+              top: "100px",
+            }}
+          >
+            {this.get_FC_handle_text("FC2")}
+          </div>
+          <input
+            style={{
+              position: "absolute",
+              left: "00px",
+              top: "220px",
+              width: "190px",
+              background: "#f00",
+              color: "#fff",
+              fontWeight: "bold",
+              borderRadius: "5px",
+              fontSize: "20px",
+            }}
+            type="button"
+            value="СТОП"
+            onClick={() => {
+              let upd_vars: iPlcVar[] = [
+                ...[
+                  this.state.plc_vars[this.getPlcVarIndexByName("FC1_command")],
+                  this.state.plc_vars[this.getPlcVarIndexByName("FC2_command")],
+                  this.state.plc_vars[this.getPlcVarIndexByName("FC1_freq")],
+                  this.state.plc_vars[this.getPlcVarIndexByName("FC2_freq")],
+                ],
+              ];
+              upd_vars.forEach((item) => (item.value = 0x0000));
+              Axios.put(
+                `http://${parse(window.location.href).hostname}:5000/plc_vars`,
+                upd_vars
+              );
+            }}
+          />
           <SvgStyleTag name="names" value={this.state.show_names} />
           <ul style={{ listStyle: "none", display: "inline" }}>
             <li style={{ display: "inline", marginRight: "5px" }}>
@@ -193,6 +241,99 @@ class MnemoMD extends Component<iProps, iState> {
       </div>
     );
   }
+  get_FC_handle_text = (fc_name: string) => {
+    return (
+      <div
+        style={{
+          // position: "relative",
+          // left: "0px",
+          // top: "100px",
+          border: "solid #0f0 1px",
+          width: "90px",
+        }}
+      >
+        <div style={{ position: "relative", height: "45px", width: "90px" }}>
+          {this.get_numeric_handle_text(fc_name + "_freq", "", 0, 0, true)}
+        </div>
+        <div>
+          <input
+            type="button"
+            value="start"
+            style={{ width: "45px" }}
+            onClick={() => {
+              this.writeValue(
+                this.state.plc_vars[
+                  this.getPlcVarIndexByName(fc_name + "_command")
+                ],
+                0x0001
+              );
+            }}
+            disabled={
+              this.state.plc_vars[
+                this.getPlcVarIndexByName(fc_name + "_reset_error")
+              ]?.value === true
+            }
+          />
+          <input
+            type="button"
+            value="stop"
+            style={{ width: "45px" }}
+            onClick={() => {
+              this.writeValue(
+                this.state.plc_vars[
+                  this.getPlcVarIndexByName(fc_name + "_command")
+                ],
+                0x0000
+              );
+            }}
+            disabled={
+              this.state.plc_vars[
+                this.getPlcVarIndexByName(fc_name + "_reset_error")
+              ]?.value === true
+            }
+          />
+          <br />
+          <input
+            type="button"
+            value="reset fault"
+            style={{ width: "90px" }}
+            onClick={() => {
+              this.writeValue(
+                this.state.plc_vars[
+                  this.getPlcVarIndexByName(fc_name + "_command")
+                ],
+                0x0080
+              );
+            }}
+            disabled={
+              this.state.plc_vars[
+                this.getPlcVarIndexByName(fc_name + "_reset_error")
+              ]?.value === true
+            }
+          />
+          <br />
+          <input
+            type="button"
+            value="hard reset"
+            style={{ width: "90px" }}
+            onClick={() => {
+              this.writeValue(
+                this.state.plc_vars[
+                  this.getPlcVarIndexByName(fc_name + "_reset_error")
+                ],
+                true
+              );
+            }}
+            disabled={
+              this.state.plc_vars[
+                this.getPlcVarIndexByName(fc_name + "_reset_error")
+              ]?.value === true
+            }
+          />
+        </div>
+      </div>
+    );
+  };
   get_numeric_handle_text = (
     prop_name: string,
     text: string,
@@ -212,7 +353,7 @@ class MnemoMD extends Component<iProps, iState> {
         left={`${left}px`}
         top={`${top}px`}
         text={text}
-        changeable = {changeable}
+        changeable={changeable}
       />
     ) : (
       " "
@@ -226,7 +367,7 @@ class MnemoMD extends Component<iProps, iState> {
   ) => {
     if (this.getPlcVarIndexByName("Y2") == -1) return "";
     return (
-      <MnemoBooleanPresentation
+      <MnemoBooleanPresentationStyled
         key={`${
           this.state.plc_vars[this.getPlcVarIndexByName(prop_name)].id
         }_add_key_${this.state.additional_key}`}
@@ -245,7 +386,7 @@ class MnemoMD extends Component<iProps, iState> {
 
     return (
       <div>
-        <MnemoBooleanPresentation
+        <MnemoBooleanPresentationStyled
           key={`${
             this.state.plc_vars[this.getPlcVarIndexByName("Y1")].id
           }_add_key_${this.state.additional_key}`}
@@ -257,7 +398,7 @@ class MnemoMD extends Component<iProps, iState> {
           top="313px"
           text="Распределитель Р1"
         />
-        <MnemoBooleanPresentation
+        <MnemoBooleanPresentationStyled
           key={`${
             this.state.plc_vars[this.getPlcVarIndexByName("Y2")].id
           }_add_key_${this.state.additional_key}`}
@@ -269,7 +410,7 @@ class MnemoMD extends Component<iProps, iState> {
           top="278px"
           text="Распределитель Р2"
         />
-        <MnemoBooleanPresentation
+        <MnemoBooleanPresentationStyled
           key={`${
             this.state.plc_vars[this.getPlcVarIndexByName("Y16")].id
           }_add_key_${this.state.additional_key}`}
@@ -281,7 +422,7 @@ class MnemoMD extends Component<iProps, iState> {
           top="118px"
           text=""
         />
-        <MnemoBooleanPresentation
+        <MnemoBooleanPresentationStyled
           key={`${
             this.state.plc_vars[this.getPlcVarIndexByName("Y17")].id
           }_add_key_${this.state.additional_key}`}
@@ -293,7 +434,7 @@ class MnemoMD extends Component<iProps, iState> {
           top="118px"
           text="Распределитель Р11"
         />
-        <MnemoBooleanPresentation
+        <MnemoBooleanPresentationStyled
           key={`${
             this.state.plc_vars[this.getPlcVarIndexByName("Y18")].id
           }_add_key_${this.state.additional_key}`}
@@ -305,7 +446,7 @@ class MnemoMD extends Component<iProps, iState> {
           top="160px"
           text="Распределитель Р12"
         />
-        <MnemoBooleanPresentation
+        <MnemoBooleanPresentationStyled
           key={`${
             this.state.plc_vars[this.getPlcVarIndexByName("Y9")].id
           }_add_key_${this.state.additional_key}`}
@@ -317,7 +458,7 @@ class MnemoMD extends Component<iProps, iState> {
           top="240px"
           text="Распределитель Р7"
         />
-        <MnemoBooleanPresentation
+        <MnemoBooleanPresentationStyled
           key={`${
             this.state.plc_vars[this.getPlcVarIndexByName("Y8")].id
           }_add_key_${this.state.additional_key}`}
@@ -329,7 +470,7 @@ class MnemoMD extends Component<iProps, iState> {
           top="240px"
           text=""
         />
-        <MnemoBooleanPresentation
+        <MnemoBooleanPresentationStyled
           key={`${
             this.state.plc_vars[this.getPlcVarIndexByName("Y10")].id
           }_add_key_${this.state.additional_key}`}
@@ -341,7 +482,7 @@ class MnemoMD extends Component<iProps, iState> {
           top="280px"
           text="Распределитель Р8"
         />
-        <MnemoBooleanPresentation
+        <MnemoBooleanPresentationStyled
           key={`${
             this.state.plc_vars[this.getPlcVarIndexByName("Y11")].id
           }_add_key_${this.state.additional_key}`}
@@ -353,7 +494,7 @@ class MnemoMD extends Component<iProps, iState> {
           top="280px"
           text=""
         />
-        <MnemoBooleanPresentation
+        <MnemoBooleanPresentationStyled
           key={`${
             this.state.plc_vars[this.getPlcVarIndexByName("Y13")].id
           }_add_key_${this.state.additional_key}`}
@@ -365,7 +506,7 @@ class MnemoMD extends Component<iProps, iState> {
           top="344px"
           text="Распределитель Р9"
         />
-        <MnemoBooleanPresentation
+        <MnemoBooleanPresentationStyled
           key={`${
             this.state.plc_vars[this.getPlcVarIndexByName("Y12")].id
           }_add_key_${this.state.additional_key}`}
@@ -377,7 +518,7 @@ class MnemoMD extends Component<iProps, iState> {
           top="344px"
           text=""
         />
-        <MnemoBooleanPresentation
+        <MnemoBooleanPresentationStyled
           key={`${
             this.state.plc_vars[this.getPlcVarIndexByName("Y14")].id
           }_add_key_${this.state.additional_key}`}
@@ -389,7 +530,7 @@ class MnemoMD extends Component<iProps, iState> {
           top="480px"
           text="Распределитель Р10"
         />
-        <MnemoBooleanPresentation
+        <MnemoBooleanPresentationStyled
           key={`${
             this.state.plc_vars[this.getPlcVarIndexByName("Y15")].id
           }_add_key_${this.state.additional_key}`}
@@ -403,17 +544,23 @@ class MnemoMD extends Component<iProps, iState> {
         />
         {this.get_numeric_handle_text("BP4", "Датчик давления ДД4", 555, 630)}
 
-
-        {this.get_boolean_handle_text("HPV3_EN", "Регулятор расхода РР3", 645, 990)}
+        {this.get_boolean_handle_text(
+          "HPV3_EN",
+          "Регулятор расхода РР3",
+          645,
+          990
+        )}
         {this.get_numeric_handle_text("YPP3_Iref", "", 685, 1140, true)}
         {this.get_boolean_handle_text("HPV3_RAMP", "", 665, 1140)}
 
-        {this.get_boolean_handle_text("HPV4_EN", "Регулятор расхода РР4", 709, 530)}
+        {this.get_boolean_handle_text(
+          "HPV4_EN",
+          "Регулятор расхода РР4",
+          709,
+          530
+        )}
         {this.get_numeric_handle_text("YPP4_Iref", "", 749, 680, true)}
         {this.get_boolean_handle_text("HPV4_RAMP", "", 729, 680)}
-
-
-
 
         {this.get_numeric_handle_text("BP3", "Датчик давления ДД3", 565, 1010)}
         {this.get_numeric_handle_text("BP1", "Датчик давления ДД1", 550, 20)}
@@ -432,33 +579,29 @@ class MnemoMD extends Component<iProps, iState> {
 
     return (
       <div>
-        {/* <MnemoBooleanPresentation
-          key={`${
-            this.state.plc_vars[this.getPlcVarIndexByName("Y15")].id
-          }_add_key_${this.state.additional_key}`}
-          varitem={this.state.plc_vars[this.getPlcVarIndexByName("Y15")]}
-          value_change={this.value_changed}
-          writeValue={this.writeValue}
-          useritem={this.state.user_var[this.getPlcVarIndexByName("Y15")]}
-          left="830px"
-          top="480px"
-          text=""
-        /> */}
         {this.get_boolean_handle_text("Y3", "Распределитель Р3", 643, 508)}
         {this.get_boolean_handle_text("Y4", "Распределитель Р4", 475, 30)}
         {this.get_boolean_handle_text("Y5", "", 475, 220)}
         {this.get_boolean_handle_text("Y6", "Распределитель Р5", 740, 510)}
         {this.get_boolean_handle_text("Y7", "Распределитель Р6", 693, 514)}
 
-        {this.get_boolean_handle_text("HPV1_EN", "Регулятор расхода РР1", 465, 540)}
+        {this.get_boolean_handle_text(
+          "HPV1_EN",
+          "Регулятор расхода РР1",
+          465,
+          540
+        )}
         {this.get_numeric_handle_text("YPP1_Iref", "", 505, 690, true)}
         {this.get_boolean_handle_text("HPV1_RAMP", "", 485, 690)}
 
-        {this.get_boolean_handle_text("HPV2_EN", "Регулятор расхода РР1", 265, 140)}
+        {this.get_boolean_handle_text(
+          "HPV2_EN",
+          "Регулятор расхода РР1",
+          265,
+          140
+        )}
         {this.get_numeric_handle_text("YPP2_Iref", "", 305, 290, true)}
         {this.get_boolean_handle_text("HPV2_RAMP", "", 285, 290)}
-
-
 
         {this.get_numeric_handle_text("SP12", "Рэле давления Д12", 20, 694)}
         {this.get_numeric_handle_text("SP11", "Рэле давления Д11", 52, 750)}
