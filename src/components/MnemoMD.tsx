@@ -171,7 +171,7 @@ class MnemoMD extends Component<iProps, iState> {
             style={{
               position: "absolute",
               left: "0px",
-              top: "100px",
+              top: "80px",
             }}
           >
             {this.get_FC_handle_text("FC1")}
@@ -180,7 +180,7 @@ class MnemoMD extends Component<iProps, iState> {
             style={{
               position: "absolute",
               left: "100px",
-              top: "100px",
+              top: "80px",
             }}
           >
             {this.get_FC_handle_text("FC2")}
@@ -189,7 +189,7 @@ class MnemoMD extends Component<iProps, iState> {
             style={{
               position: "absolute",
               left: "00px",
-              top: "220px",
+              top: "240px",
               width: "190px",
               background: "#f00",
               color: "#fff",
@@ -252,8 +252,39 @@ class MnemoMD extends Component<iProps, iState> {
           width: "90px",
         }}
       >
+        <input
+          type="button"
+          style={{
+            borderRadius: "12px",
+            height: "12px",
+            width: "12px",
+            position: "absolute",
+            top: "5px",
+            left: "75px",
+            padding: "0px",
+            backgroundColor:
+              this.state.plc_vars[
+                this.getPlcVarIndexByName(fc_name + "_command")
+              ]?.value === 0x0001
+                ? "#0f0"
+                : "#ddd",
+          }}
+          disabled
+        />
+        
         <div style={{ position: "relative", height: "45px", width: "90px" }}>
           {this.get_numeric_handle_text(fc_name + "_freq", "", 0, 0, true)}
+        </div>
+        <div style={{color: "#000", textAlign: "left"}}>
+          {
+            "f:"+this.state.plc_vars[this.getPlcVarIndexByName(fc_name + "_out_freq")]
+            ?.value
+          }
+          <br />
+          {
+            "I:"+this.state.plc_vars[this.getPlcVarIndexByName(fc_name + "_out_curr")]
+            ?.value
+          }
         </div>
         <div>
           <input
@@ -596,7 +627,7 @@ class MnemoMD extends Component<iProps, iState> {
 
         {this.get_boolean_handle_text(
           "HPV2_EN",
-          "Регулятор расхода РР1",
+          "Регулятор расхода РР2",
           265,
           140
         )}
