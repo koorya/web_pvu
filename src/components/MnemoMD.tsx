@@ -23,6 +23,7 @@ import SvgStyles from "./svgmd/SvgStyles";
 import SvgStyleTag from "./svgmd/SvgStyleTag";
 import MnemoNumericPresentation from "./MnemoNumericPresentation";
 import MnemoBooleanPresentationStyled from "./MnemoBooleanPresentationStyled";
+import HydraulicCircuit from "../HydraulicCircuit";
 
 interface MatchParams {
   page_id: string;
@@ -31,6 +32,7 @@ interface MatchParams {
 interface iProps extends RouteComponentProps<MatchParams> {}
 interface iState {
   plc_vars: iPlcVar[];
+  plc_vars_dict: { [name: string]: iPlcVar };
 
   user_var: iPlcVar[];
   additional_key: number;
@@ -40,6 +42,8 @@ interface iState {
 function getState(): iState {
   const ret: iState = {
     plc_vars: [],
+    plc_vars_dict: {},
+
     user_var: [],
     additional_key: 0,
     show_names: false,
@@ -59,15 +63,27 @@ class MnemoMD extends Component<iProps, iState> {
     Axios.get(
       `http://${parse(window.location.href).hostname}:5000/plc_vars`
     ).then((res) => {
+      const plc_vars_dict_: { [name: string]: iPlcVar } = {};
+      res.data.forEach((element: iPlcVar) => {
+        plc_vars_dict_[element.name] = element;
+      });
       this.setState((state, props) => ({
         plc_vars: res.data,
+        plc_vars_dict: plc_vars_dict_,
         user_var: JSON.parse(JSON.stringify(res.data)),
       }));
       //здесь происходит обновление по интервалу
       this.timerID = setInterval(() => {
         Axios.get(
           `http://${parse(window.location.href).hostname}:5000/plc_vars`
-        ).then((res) => this.setState({ plc_vars: res.data }));
+        ).then((res) => {
+          const plc_vars_dict_: { [name: string]: iPlcVar } = {};
+          res.data.forEach((element: iPlcVar) => {
+            plc_vars_dict_[element.name] = element;
+          });
+
+          this.setState({ plc_vars: res.data, plc_vars_dict: plc_vars_dict_ });
+        });
       }, 500);
     });
   }
@@ -161,60 +177,87 @@ class MnemoMD extends Component<iProps, iState> {
           {page_number == 1 ? <Page1 /> : ""}
           {page_number == 2 ? this.page2_text() : ""}
           {page_number == 3 ? this.page3_text() : ""}
-          {this.get_boolean_handle_text(
-            "K5",
-            "Реле включения/выключения распределения питания +24 (силовая нагрузка)",
-            0,
-            0
+          {page_number == 4 ? (
+            this.state.plc_vars.length > 1 ? (
+              <HydraulicCircuit
+                plc_vars={this.state.plc_vars_dict}
+                handler={(upd_vars: iPlcVar[]) => {
+                  Axios.put(
+                    `http://${
+                      parse(window.location.href).hostname
+                    }:5000/plc_vars`,
+                    upd_vars
+                  );
+                }}
+              />
+            ) : (
+              ""
+            )
+          ) : (
+            ""
           )}
           <div
             style={{
               position: "absolute",
-              left: "0px",
-              top: "80px",
+              left: page_number !== 4 ? "0px" : "438px",
+              top: page_number !== 4 ? "80px" : "200px",
             }}
           >
-            {this.get_FC_handle_text("FC1")}
+            <div
+              style={{
+                position: "absolute",
+                left: "0px",
+                top: "0px",
+              }}
+            >
+              {this.get_FC_handle_text("FC1")}
+            </div>
+            <div
+              style={{
+                position: "absolute",
+                left: "100px",
+                top: "0px",
+              }}
+            >
+              {this.get_FC_handle_text("FC2")}
+            </div>
+            <input
+              style={{
+                position: "absolute",
+                left: "00px",
+                top: "165px",
+                width: "190px",
+                background: "#f00",
+                color: "#fff",
+                fontWeight: "bold",
+                borderRadius: "5px",
+                fontSize: "20px",
+              }}
+              type="button"
+              value="СТОП"
+              onClick={() => {
+                let upd_vars: iPlcVar[] = [
+                  ...[
+                    this.state.plc_vars[
+                      this.getPlcVarIndexByName("FC1_command")
+                    ],
+                    this.state.plc_vars[
+                      this.getPlcVarIndexByName("FC2_command")
+                    ],
+                    this.state.plc_vars[this.getPlcVarIndexByName("FC1_freq")],
+                    this.state.plc_vars[this.getPlcVarIndexByName("FC2_freq")],
+                  ],
+                ];
+                upd_vars.forEach((item) => (item.value = 0x0000));
+                Axios.put(
+                  `http://${
+                    parse(window.location.href).hostname
+                  }:5000/plc_vars`,
+                  upd_vars
+                );
+              }}
+            />
           </div>
-          <div
-            style={{
-              position: "absolute",
-              left: "100px",
-              top: "80px",
-            }}
-          >
-            {this.get_FC_handle_text("FC2")}
-          </div>
-          <input
-            style={{
-              position: "absolute",
-              left: "00px",
-              top: "240px",
-              width: "190px",
-              background: "#f00",
-              color: "#fff",
-              fontWeight: "bold",
-              borderRadius: "5px",
-              fontSize: "20px",
-            }}
-            type="button"
-            value="СТОП"
-            onClick={() => {
-              let upd_vars: iPlcVar[] = [
-                ...[
-                  this.state.plc_vars[this.getPlcVarIndexByName("FC1_command")],
-                  this.state.plc_vars[this.getPlcVarIndexByName("FC2_command")],
-                  this.state.plc_vars[this.getPlcVarIndexByName("FC1_freq")],
-                  this.state.plc_vars[this.getPlcVarIndexByName("FC2_freq")],
-                ],
-              ];
-              upd_vars.forEach((item) => (item.value = 0x0000));
-              Axios.put(
-                `http://${parse(window.location.href).hostname}:5000/plc_vars`,
-                upd_vars
-              );
-            }}
-          />
           <SvgStyleTag name="names" value={this.state.show_names} />
           <ul style={{ listStyle: "none", display: "inline" }}>
             <li style={{ display: "inline", marginRight: "5px" }}>
@@ -225,6 +268,9 @@ class MnemoMD extends Component<iProps, iState> {
             </li>
             <li style={{ display: "inline", marginRight: "5px" }}>
               <Link to="/md/3">3</Link>
+            </li>
+            <li style={{ display: "inline", marginRight: "5px" }}>
+              <Link to="/md/4">4</Link>
             </li>
           </ul>
           names:{"  "}
@@ -271,20 +317,20 @@ class MnemoMD extends Component<iProps, iState> {
           }}
           disabled
         />
-        
+
         <div style={{ position: "relative", height: "45px", width: "90px" }}>
           {this.get_numeric_handle_text(fc_name + "_freq", "", 0, 0, true)}
         </div>
-        <div style={{color: "#000", textAlign: "left"}}>
-          {
-            "f:"+this.state.plc_vars[this.getPlcVarIndexByName(fc_name + "_out_freq")]
-            ?.value
-          }
+        <div style={{ color: "#000", textAlign: "left" }}>
+          {"f:" +
+            this.state.plc_vars[
+              this.getPlcVarIndexByName(fc_name + "_out_freq")
+            ]?.value}
           <br />
-          {
-            "I:"+this.state.plc_vars[this.getPlcVarIndexByName(fc_name + "_out_curr")]
-            ?.value
-          }
+          {"I:" +
+            this.state.plc_vars[
+              this.getPlcVarIndexByName(fc_name + "_out_curr")
+            ]?.value}
         </div>
         <div>
           <input
