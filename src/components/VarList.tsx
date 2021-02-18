@@ -110,28 +110,77 @@ export default class VarList extends Component<iProps, iState> {
   };
 
   render() {
+    let joyskik_deskript = "";
+    const joystick_destriptions = [
+      "Пропорциональныое задание угла поворота",
+      "Дискретное задание угла поворота",
+      "Управление гидравликой подъемника",
+    ];
+
+    const joystick_value = this.state.plc_vars[
+      this.getPlcVarIndexByName("HMI_Joystick2_Kind")
+    ]?.value;
+    if (joystick_value !== undefined)
+      joyskik_deskript = joystick_destriptions[joystick_value];
+
     return (
       <div>
-        {this.state.plc_vars.map((item, index) => (
-          <VarItem
-            key={`${item.id}_add_key_${this.state.additional_key}`}
-            varitem={item}
-            value_change={this.value_changed}
-            writeValue={this.writeValue}
-            useritem={this.state.user_var[index]}
-          />
-        ))}
-        <input
-          type="button"
-          onClick={(e) => this.updateAll()}
-          value="writeAll"
-        />
-        <input
-          type="button"
-          onClick={(e) => this.resetAll()}
-          value="resetAll"
-        />
+        <div style={{ width: "25%", float: "left", marginRight: "2%" }}>
+          {this.state.plc_vars.map((item, index) =>
+            (index < 35) && (item.name !== "HMI_Joystick2_Kind") 
+            && (item.name !== "HMI_Forward")
+            && (item.name !== "HMI_Reverse")? (
+              <VarItem
+                key={`${item.id}_add_key_${this.state.additional_key}`}
+                varitem={item}
+                value_change={this.value_changed}
+                writeValue={this.writeValue}
+                useritem={this.state.user_var[index]}
+              />
+            ) : (
+              ""
+            )
+          )}
+        </div>
+
+        {/* <div style={{ width: "49%", float: "left" }}>
+          {this.state.plc_vars.map((item, index) =>
+            index >= 15 ? (
+              <VarItem
+                key={`${item.id}_add_key_${this.state.additional_key}`}
+                varitem={item}
+                value_change={this.value_changed}
+                writeValue={this.writeValue}
+                useritem={this.state.user_var[index]}
+              />
+            ) : (
+              ""
+            )
+          )}
+        </div> */}
+
+        <div style={{ fontSize: "30pt" }}>{joyskik_deskript}</div>
+        <div style={{ fontSize: "30pt" }}>
+          {this.state.plc_vars[this.getPlcVarIndexByName("HMI_Forward")]
+            ?.value
+            ? "Движение вперед"
+            : (this.state.plc_vars[this.getPlcVarIndexByName("HMI_Reverse")]
+            ?.value
+            ? "Движение назад"
+            : "Остановка (режим ожидания)")}
+        </div>
+
+            <div style={{ clear: "both" }}></div>
       </div>
     );
   }
+
+  getPlcVarIndexByName = (name: string): number => {
+    let ret_index = -1;
+    this.state.plc_vars.find((item, index) => {
+      ret_index = index;
+      return item.name === name;
+    });
+    return ret_index;
+  };
 }

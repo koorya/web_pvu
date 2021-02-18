@@ -69,10 +69,10 @@ export default class VarItem extends Component<iProps, iState> {
           <div className="varitem_name">{this.props.varitem.name}</div>
 
           <div className="varitem_plcvalue">
-            {this.props.varitem.value.toString()}
+            {this.props.varitem.value?.toString()}
           </div>
           <div className="varitem_uservalue">
-            <input
+            {/* <input
               ref={this.input}
               type="text"
               name="user_value"
@@ -80,7 +80,7 @@ export default class VarItem extends Component<iProps, iState> {
               className={(() => {
                 if (
                   this.state.user_value.toString() ===
-                  this.props.varitem.value.toString()
+                  this.props.varitem.value?.toString()
                 )
                   return "varvalue";
                 else return "varvalue different";
@@ -98,7 +98,7 @@ export default class VarItem extends Component<iProps, iState> {
               type="button"
               value="write"
               onClick={(e) => this.writeValue()}
-            />
+            /> */}
           </div>
         </div>
         <div style={{ clear: "both" }}></div>

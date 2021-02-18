@@ -19,7 +19,7 @@ class App extends Component {
             <Route exact path="/md/:page_id" component={MnemoMD} />
             <Route exact path="/svgmd" component={SvgMD} />
             <Route exact path="/image" component={Image} />
-            <Redirect from="/" to="/md/4" />
+            <Redirect from="/" to="/home" />
           </Switch>
         </BrowserRouter>
       </div>
