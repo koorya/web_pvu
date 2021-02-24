@@ -4,6 +4,7 @@ import { iPlcVar } from "./iPlcVar";
 interface iProps {
   key: any;
   varitem: iPlcVar;
+  descript: string;
   useritem: iPlcVar;
   value_change: (item: iPlcVar, value: any) => void;
   writeValue: (changed_item: iPlcVar, value: any) => boolean;
@@ -66,7 +67,7 @@ export default class VarItem extends Component<iProps, iState> {
     return (
       <div style={{ padding: "1px" }}>
         <div className="varitem">
-          <div className="varitem_name">{this.props.varitem.name}</div>
+          <div className="varitem_name">{this.props.descript}</div>
 
           <div className="varitem_plcvalue">
             {this.props.varitem.value?.toString()}
