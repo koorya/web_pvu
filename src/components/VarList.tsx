@@ -21,38 +21,6 @@ function getState(): iState {
   return ret;
 }
 
-const descriptions: { [name: string]: string } = {
-  Base_Fork_L: "описание переменной Base_Fork_L",
-  Base_Fork_R: "описание переменной Base_Fork_R",
-  End_Fork_L: "описание переменной End_Fork_L",
-  End_Fork_L2: "описание переменной End_Fork_L2",
-  End_Fork_R: "описание переменной End_Fork_R",
-  End_Fork_R2: "описание переменной End_Fork_R2",
-  HMI_Battery_Procent: "описание переменной HMI_Battery_Procent",
-  HMI_Battery_Voltage: "описание переменной HMI_Battery_Voltage",
-  HMI_Cargo_Angle: "описание переменной HMI_Cargo_Angle",
-  HMI_Cargo_H_State: "описание переменной HMI_Cargo_H_State",
-  HMI_Cargo_Height: "описание переменной HMI_Cargo_Height",
-  HMI_Dist_Bottom: "описание переменной HMI_Dist_Bottom",
-  HMI_Dist_Top: "описание переменной HMI_Dist_Top",
-  HMI_HandBrake: "описание переменной HMI_HandBrake",
-  HMI_Turttle: "описание переменной HMI_Turttle",
-  HMI_Seat: "описание переменной HMI_Seat",
-  HMI_Targ_Angle: "описание переменной HMI_Targ_Angle",
-  HMI_Curr_Angle: "описание переменной HMI_Curr_Angle",
-  HMI_Speed: "описание переменной HMI_Speed",
-  HMI_Matrix_Step_Angles: "описание переменной HMI_Matrix_Step_Angles",
-  HMI_US1: "описание переменной HMI_US1",
-  HMI_US2: "описание переменной HMI_US2",
-  HMI_US3: "описание переменной HMI_US3",
-  HMI_US4: "описание переменной HMI_US4",
-  HMI_US5: "описание переменной HMI_US5",
-  HMI_US6: "описание переменной HMI_US6",
-  HMI_Reverse: "описание переменной HMI_Reverse",
-  HMI_Forward: "описание переменной HMI_Forward",
-  HMI_Joystick2_Kind: "описание переменной HMI_Joystick2_Kind",
-};
-
 export default class VarList extends Component<iProps, iState> {
   state = getState();
 
@@ -142,78 +110,29 @@ export default class VarList extends Component<iProps, iState> {
   };
 
   render() {
-    let joyskik_deskript = "";
-    const joystick_destriptions = [
-      "Пропорциональныое задание угла поворота",
-      "Дискретное задание угла поворота",
-      "Управление гидравликой подъемника",
-    ];
-
-    const joystick_value = this.state.plc_vars[
-      this.getPlcVarIndexByName("HMI_Joystick2_Kind")
-    ]?.value;
-    if (joystick_value !== undefined)
-      joyskik_deskript = joystick_destriptions[joystick_value];
-
     return (
       <div>
-        <div style={{ width: "25%", float: "left", marginRight: "2%" }}>
-          {this.state.plc_vars.map((item, index) =>
-            index < 35 &&
-            item.name !== "HMI_Joystick2_Kind" &&
-            item.name !== "HMI_Forward" &&
-            item.name !== "HMI_Reverse" ? (
-              <VarItem
-                key={`${item.id}_add_key_${this.state.additional_key}`}
-                varitem={item}
-                descript={descriptions[item.name]}
-                value_change={this.value_changed}
-                writeValue={this.writeValue}
-                useritem={this.state.user_var[index]}
-              />
-            ) : (
-              ""
-            )
-          )}
-        </div>
-
-        {/* <div style={{ width: "49%", float: "left" }}>
-          {this.state.plc_vars.map((item, index) =>
-            index >= 15 ? (
-              <VarItem
-                key={`${item.id}_add_key_${this.state.additional_key}`}
-                varitem={item}
-                value_change={this.value_changed}
-                writeValue={this.writeValue}
-                useritem={this.state.user_var[index]}
-              />
-            ) : (
-              ""
-            )
-          )}
-        </div> */}
-
-        <div style={{ fontSize: "30pt" }}>{joyskik_deskript}</div>
-        <div style={{ fontSize: "30pt" }}>
-          {this.state.plc_vars[this.getPlcVarIndexByName("HMI_Forward")]?.value
-            ? "Движение вперед"
-            : this.state.plc_vars[this.getPlcVarIndexByName("HMI_Reverse")]
-                ?.value
-            ? "Движение назад"
-            : "Остановка (режим ожидания)"}
-        </div>
-
-        <div style={{ clear: "both" }}></div>
+        {this.state.plc_vars.map((item, index) => (
+          <VarItem
+            key={`${item.id}_add_key_${this.state.additional_key}`}
+            varitem={item}
+            descript={item.name}
+            value_change={this.value_changed}
+            writeValue={this.writeValue}
+            useritem={this.state.user_var[index]}
+          />
+        ))}
+        <input
+          type="button"
+          onClick={(e) => this.updateAll()}
+          value="writeAll"
+        />
+        <input
+          type="button"
+          onClick={(e) => this.resetAll()}
+          value="resetAll"
+        />
       </div>
     );
   }
-
-  getPlcVarIndexByName = (name: string): number => {
-    let ret_index = -1;
-    this.state.plc_vars.find((item, index) => {
-      ret_index = index;
-      return item.name === name;
-    });
-    return ret_index;
-  };
 }

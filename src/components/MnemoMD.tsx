@@ -24,6 +24,7 @@ import SvgStyleTag from "./svgmd/SvgStyleTag";
 import MnemoNumericPresentation from "./MnemoNumericPresentation";
 import MnemoBooleanPresentationStyled from "./MnemoBooleanPresentationStyled";
 import HydraulicCircuit from "../HydraulicCircuit";
+import VarList from "./VarList";
 
 interface MatchParams {
   page_id: string;
@@ -84,7 +85,7 @@ class MnemoMD extends Component<iProps, iState> {
 
           this.setState({ plc_vars: res.data, plc_vars_dict: plc_vars_dict_ });
         });
-      }, 500);
+      }, 100);
     });
   }
 
@@ -196,6 +197,7 @@ class MnemoMD extends Component<iProps, iState> {
           ) : (
             ""
           )}
+          {page_number == 5 ?<VarList />:""}
           <div
             style={{
               position: "absolute",
