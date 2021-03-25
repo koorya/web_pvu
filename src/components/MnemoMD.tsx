@@ -26,6 +26,9 @@ import MnemoBooleanPresentationStyled from "./MnemoBooleanPresentationStyled";
 import HydraulicCircuit from "../HydraulicCircuit";
 import VarList from "./VarList";
 
+import Locks from "../svg/image_locks";
+import LocksOrtho from "../svg/image_lock_ortho";
+
 interface MatchParams {
   page_id: string;
 }
@@ -197,7 +200,244 @@ class MnemoMD extends Component<iProps, iState> {
           ) : (
             ""
           )}
-          {page_number == 5 ?<VarList />:""}
+          {page_number == 5 ? <VarList /> : ""}
+          {page_number == 6 ? (
+            <Locks
+              sq_1_2={
+                this.state.plc_vars_dict["SQ1"]?.value +
+                2 * this.state.plc_vars_dict["SQ2"]?.value
+              }
+              sq_3_4={
+                this.state.plc_vars_dict["SQ3"]?.value +
+                2 * this.state.plc_vars_dict["SQ4"]?.value
+              }
+              sq_5_6={
+                this.state.plc_vars_dict["SQ5"]?.value +
+                2 * this.state.plc_vars_dict["SQ6"]?.value
+              }
+              sq_7_8={
+                this.state.plc_vars_dict["SQ7"]?.value +
+                2 * this.state.plc_vars_dict["SQ8"]?.value
+              }
+              sq_9_10={
+                this.state.plc_vars_dict["SQ9"]?.value +
+                2 * this.state.plc_vars_dict["SQ10"]?.value
+              }
+              sq_11_12={
+                this.state.plc_vars_dict["SQ11"]?.value +
+                2 * this.state.plc_vars_dict["SQ12"]?.value
+              }
+              sq_13_14={
+                this.state.plc_vars_dict["SQ13"]?.value +
+                2 * this.state.plc_vars_dict["SQ14"]?.value
+              }
+              sq_15_16={
+                this.state.plc_vars_dict["SQ15"]?.value +
+                2 * this.state.plc_vars_dict["SQ16"]?.value
+              }
+              sq_17_18={
+                this.state.plc_vars_dict["SQ17"]?.value +
+                2 * this.state.plc_vars_dict["SQ18"]?.value
+              }
+              sq_19_20={
+                this.state.plc_vars_dict["SQ19"]?.value +
+                2 * this.state.plc_vars_dict["SQ20"]?.value
+              }
+              sq_21_22={
+                this.state.plc_vars_dict["SQ21"]?.value +
+                2 * this.state.plc_vars_dict["SQ22"]?.value
+              }
+              sq_23_24={
+                this.state.plc_vars_dict["SQ23"]?.value +
+                2 * this.state.plc_vars_dict["SQ24"]?.value
+              }
+              sq_25_26={
+                this.state.plc_vars_dict["SQ25"]?.value +
+                2 * this.state.plc_vars_dict["SQ26"]?.value
+              }
+              sq_27_28={
+                this.state.plc_vars_dict["SQ27"]?.value +
+                2 * this.state.plc_vars_dict["SQ28"]?.value
+              }
+              sq_29_30={
+                this.state.plc_vars_dict["SQ29"]?.value +
+                2 * this.state.plc_vars_dict["SQ30"]?.value
+              }
+              sq_31_32={
+                this.state.plc_vars_dict["SQ31"]?.value +
+                2 * this.state.plc_vars_dict["SQ32"]?.value
+              }
+            />
+          ) : (
+            ""
+          )}
+          {page_number == 7 ? (
+            <LocksOrtho
+              sq_1_2={
+                this.state.plc_vars_dict["SQ1"]?.value +
+                2 * this.state.plc_vars_dict["SQ2"]?.value
+              }
+              sq_3_4={
+                this.state.plc_vars_dict["SQ3"]?.value +
+                2 * this.state.plc_vars_dict["SQ4"]?.value
+              }
+              sq_5_6={
+                2 * this.state.plc_vars_dict["SQ5"]?.value +
+                 this.state.plc_vars_dict["SQ6"]?.value
+              }
+              sq_7_8={
+                2 * this.state.plc_vars_dict["SQ7"]?.value +
+                this.state.plc_vars_dict["SQ8"]?.value
+              }
+              sq_9_10={
+                this.state.plc_vars_dict["SQ9"]?.value +
+                2 * this.state.plc_vars_dict["SQ10"]?.value
+              }
+              sq_11_12={
+                this.state.plc_vars_dict["SQ11"]?.value +
+                2 * this.state.plc_vars_dict["SQ12"]?.value
+              }
+              sq_13_14={
+                2 *this.state.plc_vars_dict["SQ13"]?.value +
+                this.state.plc_vars_dict["SQ14"]?.value
+              }
+              sq_15_16={
+                2 * this.state.plc_vars_dict["SQ15"]?.value +
+                this.state.plc_vars_dict["SQ16"]?.value
+              }
+              sq_17_18={
+                this.state.plc_vars_dict["SQ17"]?.value +
+                2 * this.state.plc_vars_dict["SQ18"]?.value
+              }
+              sq_19_20={
+                this.state.plc_vars_dict["SQ19"]?.value +
+                2 * this.state.plc_vars_dict["SQ20"]?.value
+              }
+              sq_21_22={
+                2 * this.state.plc_vars_dict["SQ21"]?.value +
+                this.state.plc_vars_dict["SQ22"]?.value
+              }
+              sq_23_24={
+                2 * this.state.plc_vars_dict["SQ23"]?.value +
+                this.state.plc_vars_dict["SQ24"]?.value
+              }
+              sq_25_26={
+                this.state.plc_vars_dict["SQ25"]?.value +
+                2 * this.state.plc_vars_dict["SQ26"]?.value
+              }
+              sq_27_28={
+                this.state.plc_vars_dict["SQ27"]?.value +
+                2 * this.state.plc_vars_dict["SQ28"]?.value
+              }
+              sq_29_30={
+                2 * this.state.plc_vars_dict["SQ29"]?.value +
+                this.state.plc_vars_dict["SQ30"]?.value
+              }
+              sq_31_32={
+                2 * this.state.plc_vars_dict["SQ31"]?.value +
+                this.state.plc_vars_dict["SQ32"]?.value
+              }
+              SQ33={this.state.plc_vars_dict["SQ33"]?.value}
+              SQ34={this.state.plc_vars_dict["SQ34"]?.value}
+              SQ35={this.state.plc_vars_dict["SQ35"]?.value}
+              SQ36={this.state.plc_vars_dict["SQ36"]?.value}
+              SQ37={this.state.plc_vars_dict["SQ37"]?.value}
+              SQ38={this.state.plc_vars_dict["SQ38"]?.value}
+              SQ39={this.state.plc_vars_dict["SQ39"]?.value}
+              SQ40={this.state.plc_vars_dict["SQ40"]?.value}
+              SQ41={this.state.plc_vars_dict["SQ41"]?.value}
+              SQ42={this.state.plc_vars_dict["SQ42"]?.value}
+              SQ43={this.state.plc_vars_dict["SQ43"]?.value}
+              SQ44={this.state.plc_vars_dict["SQ44"]?.value}
+              SQ45={this.state.plc_vars_dict["SQ45"]?.value}
+              SQ46={this.state.plc_vars_dict["SQ46"]?.value}
+              SQ47={this.state.plc_vars_dict["SQ47"]?.value}
+              SQ48={this.state.plc_vars_dict["SQ48"]?.value}
+              BB1={this.state.plc_vars_dict["BB1"]?.value}
+              BB2={this.state.plc_vars_dict["BB2"]?.value}
+              BB3={this.state.plc_vars_dict["BB3"]?.value}
+              BB4={this.state.plc_vars_dict["BB4"]?.value}
+              BB5={this.state.plc_vars_dict["BB5"]?.value}
+              BB6={this.state.plc_vars_dict["BB6"]?.value}
+              BB7={this.state.plc_vars_dict["BB7"]?.value}
+              BB8={this.state.plc_vars_dict["BB8"]?.value}
+              BB13={this.state.plc_vars_dict["BB13"]?.value}
+              BB9={this.state.plc_vars_dict["BB9"]?.value}
+              BB10={this.state.plc_vars_dict["BB10"]?.value}
+              BB11={this.state.plc_vars_dict["BB11"]?.value}
+              BB12={this.state.plc_vars_dict["BB12"]?.value}
+            />
+          ) : (
+            ""
+          )}
+          <div
+            style={{
+              position: "absolute",
+              left: page_number !== 4 ? "0px" : "0px",
+              top: page_number !== 4 ? "80px" : "20px",
+            }}
+          >
+            <input
+              style={
+                {
+                  // position: "absolute",
+                  // left: "00px",
+                  // top: "165px",
+                }
+              }
+              type="button"
+              value="СТОП"
+              onClick={() => {
+                this.writeValue(
+                  this.state.plc_vars[
+                    this.getPlcVarIndexByName("stop_handle")
+                  ],
+                  true
+                );
+              }}
+            />
+            <input
+              style={
+                {
+                  // position: "absolute",
+                  // left: "00px",
+                  // top: "165px",
+                }
+              }
+              type="button"
+              value="Далее"
+              onClick={() => {
+                this.writeValue(
+                  this.state.plc_vars[
+                    this.getPlcVarIndexByName("continue_handle")
+                  ],
+                  true
+                );
+              }}
+            />
+            <input
+              style={
+                {
+                  // position: "absolute",
+                  // left: "00px",
+                  // top: "165px",
+                }
+              }
+              type="button"
+              value="Старт"
+              onClick={() => {
+                this.writeValue(
+                  this.state.plc_vars[
+                    this.getPlcVarIndexByName("start_handle")
+                  ],
+                  true
+                );
+              }}
+            />
+            <input type="button"
+              value={"шаг " + this.state.plc_vars_dict["main_state"]?.value} />
+            
+          </div>
           <div
             style={{
               position: "absolute",

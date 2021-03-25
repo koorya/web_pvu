@@ -28,13 +28,19 @@ class App extends Component {
             <li style={{ display: "inline", marginRight: "5px" }}>
               <Link to="/md/5"><input type="button" value="Домкрат таблица" /></Link>
             </li>
+            <li style={{ display: "inline", marginRight: "5px" }}>
+              <Link to="/md/6"><input type="button" value="Домкрат замки" /></Link>
+            </li>
+            <li style={{ display: "inline", marginRight: "5px" }}>
+              <Link to="/md/7"><input type="button" value="Домкрат замки orth" /></Link>
+            </li>
           </ul>
           <Switch>
             <Route exact path="/home" component={VarList_mt} />
             <Route exact path="/md/:page_id" component={MnemoMD} />
             <Route exact path="/svgmd" component={SvgMD} />
             <Route exact path="/image" component={Image} />
-            <Redirect from="/" to="/home" />
+            <Redirect from="/" to="/md/6" />
           </Switch>
         </BrowserRouter>
       </div>
