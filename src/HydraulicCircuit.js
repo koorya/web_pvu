@@ -122,10 +122,10 @@ class HydraulicCircuit extends React.Component {
           }
           Y18={this.props.plc_vars.Y18?.value}
           Y18_={!this.props.plc_vars.Y18?.value}
-          HPV1_EN={this.props.plc_vars.HPV1_EN?.value}
-          HPV2_EN={this.props.plc_vars.HPV2_EN?.value}
-          HPV3_EN={this.props.plc_vars.HPV3_EN?.value}
-          HPV4_EN={this.props.plc_vars.HPV4_EN?.value}
+          Y19={this.props.plc_vars.Y19?.value}
+          Y20={this.props.plc_vars.Y20?.value}
+          Y21={this.props.plc_vars.Y21?.value}
+          Y22={this.props.plc_vars.Y22?.value}
           clickfn={(el) => this.click(el.target)}
         />
       </div>

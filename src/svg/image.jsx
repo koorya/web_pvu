@@ -37609,33 +37609,33 @@ function MyComponent(props) {
         />
       </g>
       <path
-        id="HPV2_EN"
+        id="Y20"
         d="m366.94 51.01 6.23-2e-3 5e-3 -5.668 4.5352 2e-3v5.668l6.24 2e-6v15.02h-17.01z"
-        fill={props?.HPV2_EN ? "#0f0" : "#faa"}
+        fill={props?.Y20 ? "#0f0" : "#faa"}
         opacity={0.5}
         strokeWidth={0.62363}
         onClick={props.clickfn}
       />
       <path
-        id="HPV1_EN"
+        id="Y19"
         d="m366.94 77.94h17.008v15.02l-6.24-1.1e-5v5.668l-4.54 2e-3v-5.668l-6.228-2e-3z"
-        fill={props?.HPV1_EN ? "#0f0" : "#faa"}
+        fill={props?.Y19 ? "#0f0" : "#faa"}
         opacity={0.5}
         strokeWidth={0.62363}
         onClick={props.clickfn}
       />
       <path
-        id="HPV3_EN"
+        id="Y21"
         d="m625.04 398.62h15.03v17.01h-15.03l1e-5 -6.23h-5.67v-4.54h5.668z"
-        fill={props?.HPV3_EN ? "#0f0" : "#faa"}
+        fill={props?.Y21 ? "#0f0" : "#faa"}
         opacity={0.5}
         strokeWidth={0.62363}
         onClick={props.clickfn}
       />
       <path
-        id="HPV4_EN"
+        id="Y22"
         d="m662.95 478.48h15.03v17.01h-15.03l-3e-5 -6.24h-5.67v-4.5352l5.668 5e-3z"
-        fill={props?.HPV4_EN ? "#0f0" : "#faa"}
+        fill={props?.Y22 ? "#0f0" : "#faa"}
         opacity={0.5}
         strokeWidth={0.62363}
         onClick={props.clickfn}
